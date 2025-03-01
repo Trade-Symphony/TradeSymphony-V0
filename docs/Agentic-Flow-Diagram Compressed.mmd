@@ -1,0 +1,121 @@
+%%{init: {
+  'theme': 'base', 
+  'themeVariables': {
+    'primaryColor': '#f9f9f9',
+    'primaryBorderColor': '#333',
+    'primaryTextColor': '#000',
+    'lineColor': '#222',
+    'secondaryColor': '#e6e6e6',
+    'tertiaryColor': '#fff'
+  },
+  'flowchart': {
+    'diagramPadding': 3,
+    'nodeSpacing': 5,
+    'rankSpacing': 15,
+    'curve': 'linear',
+    'useMaxWidth': true
+  }
+}}%%
+
+flowchart LR
+    %% Define styles
+    classDef subgraphStyle fill:#f9f9f9,stroke:#333,stroke-width:1.5px
+    classDef nodeStyle fill:white,stroke:#222,stroke-width:1px,color:black,font-size:12px
+    classDef apiStyle fill:#e6f7ff,stroke:#0099cc,stroke-width:1px,color:black,font-size:12px
+    classDef dbStyle fill:#f0f7e6,stroke:#669900,stroke-width:1px,color:black,font-size:12px
+    classDef decisionStyle fill:#fff2e6,stroke:#ff8c1a,stroke-width:1px,color:black,font-size:12px
+    classDef memoryStyle fill:#f9e6ff,stroke:#9933cc,stroke-width:1px,color:black,font-size:12px
+    classDef feedbackStyle fill:#ffe6e6,stroke:#cc3300,stroke-width:1px,color:black,font-size:12px
+
+    %% Data Sources
+    subgraph DS["Sources"]
+        FR["Reports"]
+        NW["News"]
+        ME["Macro"]
+    end
+
+    %% External APIs
+    subgraph API["APIs"]
+        YF["Yahoo"]
+        NAPI["News"]
+        BAPI["Bloomberg"]
+        BIAS["Biaslyze"]
+        TAPI["Trading"]
+    end
+
+    %% Preprocessing Agents
+    subgraph PRE["Preprocess"]
+        SA["Scraper"]
+        NA["Neutralize"]
+    end
+
+    %% Market Analysis Components - Flattened structure
+    subgraph MA["Analysis"]
+        AA["Analyzer"]
+        TA1["Technical"]
+        FA["Fundamental"]
+        MS["Sentiment"]
+    end
+
+    %% Decision Factors - Even more compact
+    subgraph DF["Decisions"]
+        MACRO["Macro"]
+        METRICS["Metrics"]
+        COMPANY["Company"]
+        RISK["Risk"]
+        COSTS["Costs"]
+        TIMING["Timing"]
+    end
+
+    %% Memory Framework - Simplified
+    subgraph MF["Memory"]
+        STM["Short-Term"]
+        LTM["Long-Term"]
+    end
+
+    %% Databases & Storage - Simplified
+    subgraph DB["Storage"]
+        QD["QDrant"]
+        MDB["MongoDB"]
+    end
+
+    %% Trading Components - Simplified
+    subgraph TC["Trading"]
+        TA["Agent"]
+        EXEC["Execute"]
+    end
+
+    %% Feedback & Optimization - Simplified
+    subgraph FB["Feedback"]
+        FP["Preprocess"]
+        FM["Analysis"]
+        FT["Trading"]
+        PAO["Optimizer"]
+    end
+
+    %% Essential Flow Connections (simplified)
+    DS --> PRE
+    PRE --> API
+    API --> PRE
+    PRE --> MA
+    MA --> DB
+    MA --> DF
+    DB --> MF
+    MF --> TC
+    DF --> TC
+    DB --> TC
+    TC --> API
+    API --> EXEC
+    EXEC --> FB
+    FB --> PRE
+    FB --> MA
+    FB --> TC
+    
+    %% Apply styles
+    class DS,PRE,MA,DB,TC,FB,DF,MF subgraphStyle
+    class FR,NW,ME,SA,NA,AA,TA1,FA,MS,TA,EXEC nodeStyle
+    class YF,NAPI,BAPI,BIAS,TAPI apiStyle
+    class QD,MDB dbStyle
+    class MACRO,METRICS,COMPANY,RISK,COSTS,TIMING decisionStyle
+    class STM,LTM memoryStyle
+    class FP,FM,FT,PAO feedbackStyle

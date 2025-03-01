@@ -1,0 +1,164 @@
+%%{init: {
+  'theme': 'base', 
+  'themeVariables': {
+    'primaryColor': '#f9f9f9',
+    'primaryBorderColor': '#333',
+    'primaryTextColor': '#000',
+    'lineColor': '#222',
+    'secondaryColor': '#e6e6e6',
+    'tertiaryColor': '#fff'
+  }
+}}%%
+
+flowchart TD
+    %% Define styles
+    classDef subgraphStyle fill:#f9f9f9,stroke:#333,stroke-width:2px
+    classDef nodeStyle fill:white,stroke:#222,stroke-width:1.5px,color:black
+    classDef apiStyle fill:#e6f7ff,stroke:#0099cc,stroke-width:1.5px,color:black
+    classDef dbStyle fill:#f0f7e6,stroke:#669900,stroke-width:1.5px,color:black
+    classDef decisionStyle fill:#fff2e6,stroke:#ff8c1a,stroke-width:1.5px,color:black
+    classDef memoryStyle fill:#f9e6ff,stroke:#9933cc,stroke-width:1.5px,color:black
+    classDef feedbackStyle fill:#ffe6e6,stroke:#cc3300,stroke-width:1.5px,color:black
+
+    %% Data Sources
+    subgraph DataSources["Data Sources"]
+        FR["Financial Reports"]
+        NW["News (Economics, Finance, Politics)"]
+        ME["Macroeconomic Factors"]
+    end
+
+    %% External APIs
+    subgraph ExternalAPIs["External APIs & Tools"]
+        YF["Yahoo Finance API"]
+        NAPI["News API"]
+        BAPI["Bloomberg Open API"]
+        BIAS["Biaslyze API"]
+        TAPI["Trading API"]
+    end
+
+    %% Preprocessing Agents
+    subgraph Preprocessing["Preprocessing Agents"]
+        SA["Scraper Agent (Time-triggered)"]
+        NA["Neutralization Agent (Data Cleansing)"]
+    end
+
+    %% Market Analysis Components
+    subgraph MarketAnalysis["Market Analysis"]
+        AA["Main Analyzer Agent"]
+        
+        subgraph AnalysisComponents["Analysis Components"]
+            TA1["Technical Analysis<br/>(Price patterns, trends)"]
+            FA["Fundamental Analysis<br/>(Company financials)"]
+            MS["Market Sentiment<br/>(Investor behavior)"]
+        end
+    end
+
+    %% Decision Factors
+    subgraph DecisionFactors["Decision Factors"]
+        MACRO["Macroeconomic Factors<br/>(Interest rates, Inflation)"]
+        METRICS["Market Analysis Metrics"]
+        COMPANY["Company-Specific Factors"]
+        RISK["Risk Management"]
+        COSTS["Trading Costs and Logistics"]
+        TIMING["Market Timing"]
+    end
+
+    %% Memory Framework
+    subgraph MemoryFramework["Memory Framework"]
+        STM["Short-Term Memory<br/>(In-memory caches)"]
+        LTM["Long-Term Memory<br/>(Persistent storage)"]
+    end
+
+    %% Databases & Storage
+    subgraph Databases["Databases & Storage"]
+        QD["QDrant Vector DB<br/>(Short-term + Long-term)"]
+        MDB["MongoDB<br/>(Historical data)"]
+    end
+
+    %% Trading Components
+    subgraph TradingComponents["Trading Components"]
+        TA["Trading Agent<br/>(24/7 Operation)"]
+        EXEC["Trade Execution"]
+    end
+
+    %% Feedback & Optimization
+    subgraph Feedback["Feedback & Optimization"]
+        FP["Preprocessing Feedback"]
+        FM["Market Analysis Feedback"]
+        FT["Trading Feedback"]
+        PAO["Prompt Auto-Optimizer<br/>(Optional Feature)"]
+    end
+
+    %% Flow Connections: Data Ingestion & API Integration
+    FR --> SA
+    NW --> SA
+    ME --> SA
+    SA --> YF
+    SA --> NAPI
+    SA --> BAPI
+    YF --> SA
+    NAPI --> SA
+    BAPI --> SA
+    
+    %% Flow Connections: Preprocessing
+    SA --> NA
+    NA --> BIAS
+    BIAS --> NA
+    NA --> AA
+
+    %% Flow Connections: Market Analysis
+    AA --> AnalysisComponents
+    AA --> METRICS
+    TA1 --> MACRO
+    FA --> COMPANY
+    MS --> TIMING
+    
+    %% Flow Connections: Database Integration
+    TA1 --> QD
+    FA --> MDB
+    
+    %% Memory Framework Integration
+    QD --> STM
+    MDB --> LTM
+    STM --> TA
+    LTM --> TA
+    
+    %% Decision Integration
+    MACRO --> TA
+    METRICS --> TA
+    COMPANY --> TA
+    RISK --> TA
+    COSTS --> TA
+    TIMING --> TA
+    
+    %% Flow Connections: Trading Execution
+    QD --> TA
+    MDB --> TA
+    TA --> TAPI
+    TAPI --> EXEC
+    EXEC --> FT
+    
+    %% Feedback Loops
+    SA --> FP
+    NA --> FP
+    FP --> SA
+    FP --> NA
+    
+    AA --> FM
+    TA1 --> FM
+    FA --> FM
+    MS --> FM
+    FM --> AA
+    
+    FT --> PAO
+    PAO --> TA
+    FT --> TA
+    
+    %% Apply styles
+    class DataSources,Preprocessing,MarketAnalysis,AnalysisComponents,Databases,TradingComponents,Feedback,DecisionFactors,MemoryFramework subgraphStyle
+    class FR,NW,ME,SA,NA,AA,TA1,FA,MS,TA,EXEC nodeStyle
+    class YF,NAPI,BAPI,BIAS,TAPI apiStyle
+    class QD,MDB dbStyle
+    class MACRO,METRICS,COMPANY,RISK,COSTS,TIMING decisionStyle
+    class STM,LTM memoryStyle
+    class FP,FM,FT,PAO feedbackStyle
