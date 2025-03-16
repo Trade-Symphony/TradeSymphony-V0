@@ -1,0 +1,109 @@
+# Portfolio Analysis Task
+portfolio_analysis_task:
+  description: >
+    Analyze the provided portfolio's current composition in detail.
+    Examine asset allocation, sector exposure, and individual holdings.
+    Identify strengths and weaknesses in the portfolio structure.
+    Calculate key metrics including Sharpe ratio, volatility, and correlation matrix.
+  expected_output: >
+    A detailed analysis of the portfolio including key metrics, 
+    current allocation breakdown, and critical observations.
+
+# Fundamental Research Task
+fundamental_research_task:
+  description: >
+    Conduct in-depth fundamental research on all portfolio companies.
+    Review financial statements, business models, and competitive positioning.
+    Evaluate management quality, growth prospects, and potential risks.
+    Assign fair value estimates and investment recommendations.
+  expected_output: >
+    Comprehensive company analyses with valuations and investment recommendations
+    for each company in the portfolio.
+
+# Quantitative Screening Task
+quantitative_screening_task:
+  description: >
+    Perform quantitative screening based on financial metrics and momentum factors.
+    Consider the investment style (growth, value, balanced) of the portfolio.
+    Identify stocks with attractive valuation metrics and strong momentum.
+    Rank opportunities using a composite scoring methodology.
+  expected_output: >
+    A prioritized list of investment opportunities based on quantitative factors,
+    with detailed factor exposure analysis and technical signals.
+
+# Risk Assessment Task
+risk_assessment_task:
+  description: >
+    Conduct a comprehensive risk assessment of the current portfolio.
+    Identify potential vulnerabilities and tail risk events.
+    Calculate risk metrics and run various stress test scenarios.
+    Develop strategies to mitigate identified risks.
+  expected_output: >
+    Detailed risk analysis including key metrics, stress test results,
+    and recommended risk mitigation strategies.
+
+# ESG Analysis Task
+esg_analysis_task:
+  description: >
+    Evaluate all holdings and potential investments based on ESG criteria.
+    Assess environmental impact, social responsibility, and governance practices.
+    Compare ESG scores against industry benchmarks.
+    Identify ESG-related risks and opportunities within the portfolio.
+  expected_output: >
+    ESG scoring analysis for all holdings, with identified risks and 
+    opportunities related to environmental, social, and governance factors.
+
+# Macroeconomic Outlook Task
+macro_outlook_task:
+  description: >
+    Develop a comprehensive macroeconomic outlook for the next 12 months.
+    Forecast economic growth trends, inflation expectations, and interest rate movements.
+    Assess potential impacts of current geopolitical events on markets.
+    Identify key macroeconomic risks and opportunities for investors.
+  expected_output: >
+    Macroeconomic forecast with detailed analysis of growth, inflation, 
+    interest rates, and associated investment implications.
+
+# Investment Strategy Task
+investment_strategy_task:
+  description: >
+    Formulate an overall investment strategy based on all research inputs.
+    Identify key investment themes and tactical opportunities.
+    Develop a recommended asset allocation model.
+    Consider fundamental, quantitative, ESG, and macroeconomic factors.
+  expected_output: >
+    Comprehensive investment strategy with identified themes, recommended
+    asset allocation, and specific tactical recommendations.
+
+# Compliance Review Task
+compliance_review_task:
+  description: >
+    Review all proposed investment changes for regulatory compliance.
+    Ensure adherence to client mandates and investment restrictions.
+    Identify potential conflicts of interest or disclosure requirements.
+    Assess adherence to firm-wide compliance policies.
+  expected_output: >
+    Compliance assessment report with identified issues, required
+    disclosures, and recommendations for addressing compliance concerns.
+
+# Investment Committee Task
+investment_committee_task:
+  description: >
+    Review and evaluate the proposed investment strategy and portfolio changes.
+    Assess expected risk-adjusted returns and alignment with investment philosophy.
+    Consider input from all analysts and managers.
+    Vote on approval of investment recommendations.
+  expected_output: >
+    Decision document containing committee approval status, list of approved actions,
+    dissenting opinions, and conditions for implementation.
+
+# Final Recommendation Task
+final_recommendation_task:
+  description: >
+    Synthesize all inputs from the investment process into final recommendations.
+    Review investment committee decisions and conditions.
+    Finalize portfolio adjustments and implementation timeline.
+    Project expected outcomes and performance targets.
+  expected_output: >
+    Final investment recommendation report with detailed portfolio changes,
+    implementation plan, and expected outcomes for client presentation.

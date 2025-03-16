@@ -1,0 +1,52 @@
+[project]
+name = "tradesymphony"
+version = "0.1.0"
+description = "TradeSymphony using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "aiohttp>=3.11.13",
+    "alpha-vantage>=3.0.0",
+    "crewai-tools>=0.36.0",
+    "crewai[tools]>=0.102.0,<1.0.0",
+    "databricks>=0.2",
+    "databricks-sdk>=0.46.0",
+    "firecrawl-py>=1.6.8",
+    "langchain-google-genai>=2.1.0",
+    "langsmith>=0.1.147",
+    "litellm>=1.60.2",
+    "lxml>=5.3.1",
+    "mkdocs>=1.6.1",
+    "nest-asyncio>=1.6.0",
+    "plotly>=6.0.0",
+    "pydantic==2.9.2",
+    "pydantic-core>=2.14.5",
+    "pytest-asyncio>=0.25.3",
+    "python-dotenv>=1.0.1",
+    "scikit-learn>=1.6.1",
+    "streamlit>=1.43.0",
+    "tavily-python>=0.5.1",
+    "textblob>=0.19.0",
+    "vadersentiment>=3.3.2",
+    "yfinance>=0.2.54",
+]
+
+[project.scripts]
+tradesymphony = "tradesymphony.main:run"
+run_crew = "tradesymphony.main:run"
+train = "tradesymphony.main:train"
+replay = "tradesymphony.main:replay"
+test = "tradesymphony.main:test"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"
+
+[dependency-groups]
+dev = [
+    "bump-pydantic>=0.8.0",
+    "pytest>=8.3.5",
+]

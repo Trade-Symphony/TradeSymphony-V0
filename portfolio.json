@@ -1,0 +1,56 @@
+{
+  "name": "Diversified Growth Portfolio",
+  "style": "balanced",
+  "tickers": [
+    "AAPL",
+    "MSFT",
+    "GOOGL",
+    "AMZN",
+    "TSLA",
+    "JPM",
+    "JNJ",
+    "V",
+    "PG",
+    "DIS"
+  ],
+  "allocation": {
+    "AAPL": 0.15,
+    "MSFT": 0.15,
+    "GOOGL": 0.1,
+    "AMZN": 0.1,
+    "TSLA": 0.1,
+    "JPM": 0.1,
+    "JNJ": 0.1,
+    "V": 0.1,
+    "PG": 0.05,
+    "DIS": 0.05
+  },
+  "holdings": [
+    "AAPL",
+    "MSFT",
+    "GOOGL",
+    "AMZN",
+    "TSLA",
+    "JPM",
+    "JNJ",
+    "V",
+    "PG",
+    "DIS"
+  ],
+  "risk_profile": "moderate",
+  "investment_horizon": "5-10 years",
+  "market_conditions": "mixed",
+  "analysis_goals": ["growth", "income", "diversification"],
+  "sector_exposure": {
+    "technology": 0.5,
+    "financial": 0.2,
+    "healthcare": 0.1,
+    "consumer": 0.15,
+    "entertainment": 0.05
+  },
+  "constraints": {
+    "max_sector_exposure": 0.6,
+    "min_dividend_yield": 0.01,
+    "max_volatility": 0.25
+  }
+}
