@@ -7,8 +7,8 @@ from typing import Dict, Any
 import os
 from dotenv import load_dotenv
 from crewai.memory import LongTermMemory, ShortTermMemory, EntityMemory
-
-# from crewai.memory.storage.mem0_storage import Mem0Storage
+from crewai.tasks import TaskOutput
+from crewai.memory.storage.rag_storage import RAGStorage
 from crewai.memory.storage.ltm_sqlite_storage import LTMSQLiteStorage
 
 # Import custom tools
@@ -591,7 +591,7 @@ class InvestmentFirmCrew:
             verbose=self.verbose,
             process=Process.hierarchical,
             manager_llm={
-                "model": os.getenv("MODEL", "gemini/gemini-2.0-flash"),
+                "model": os.getenv("MODEL", "gpt-4o-mini"),
                 "temperature": 0.1,
             },
             manager_agent=self.crew_manager(),
@@ -601,19 +601,30 @@ class InvestmentFirmCrew:
             long_term_memory=LongTermMemory(
                 storage=LTMSQLiteStorage(
                     db_path=f"{memory_path}/long_term_memory_storage.db"
-                )
+                ),
+                # storage_format="json",
             ),
             short_term_memory=ShortTermMemory(
-                storage=LTMSQLiteStorage(
-                    db_path=f"{memory_path}/short_term_memory_storage.db"
+                storage=RAGStorage(
+                    embedder_config={
+                        "provider": "ollama",
+                        "config": {"model": "mxbai-embed-large"},
+                    },
+                    type="short_term",
+                    path=memory_path,
                 )
             ),
             entity_memory=EntityMemory(
-                storage=LTMSQLiteStorage(
-                    db_path=f"{memory_path}/entity_memory_memory_storage.db"
+                storage=RAGStorage(
+                    embedder_config={
+                        "provider": "ollama",
+                        "config": {"model": "mxbai-embed-large"},
+                    },
+                    type="short_term",
+                    path=memory_path,
                 )
             ),
-            planning=True,
+            # planning=True,
         )
 
     def log_crew_step(self, step_output: Dict[str, Any]):
@@ -634,17 +645,31 @@ class InvestmentFirmCrew:
         except Exception as e:
             print(f"LangSmith logging error: {e}")
 
-    def log_task_completion(self, task_output: Dict[str, Any]):
+    def log_task_completion(self, task_output: Dict[str, Any] | TaskOutput):
         """Callback for logging task completion in LangSmith."""
-        task_name = task_output.get("task_name", "Unknown Task")
+        # Handle both Dict and TaskOutput objects
+        if isinstance(task_output, TaskOutput):
+            task_name = (
+                task_output.task_name
+                if hasattr(task_output, "task_name")
+                else "Unknown Task"
+            )
+            inputs = getattr(task_output, "inputs", {})
+            outputs = getattr(task_output, "raw", {})
+        else:
+            # Original dictionary handling
+            task_name = task_output.get("task_name", "Unknown Task")
+            inputs = task_output.get("inputs", {})
+            outputs = task_output.get("outputs", {})
+
         print(f"✅ Task completed: {task_name}")
 
         # Log to LangSmith
         try:
             self.langsmith_client.create_run(
                 name=f"Task: {task_name}",
-                inputs={"task_input": task_output.get("inputs", {})},
-                outputs={"task_output": task_output.get("outputs", {})},
+                inputs={"task_input": inputs},
+                outputs={"task_output": outputs},
                 parent_run_id=self.tracer.get_current_run_id(),
                 project_name=os.getenv("LANGCHAIN_PROJECT", "investment-firm"),
             )

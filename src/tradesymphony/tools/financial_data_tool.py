@@ -116,4 +116,4 @@ class FinancialDataTool(BaseTool):
 
     async def _arun(self, ticker: str) -> str:
         """Use the tool asynchronously."""
-        raise NotImplementedError("This tool does not support asynchronous execution")
+        return self._run(ticker)

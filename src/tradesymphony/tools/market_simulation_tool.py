@@ -168,4 +168,11 @@ class MarketSimulationTool(BaseTool):
 
     async def _arun(self, input_data: Dict[str, Any] | str) -> str:
         """Use the tool asynchronously."""
-        raise NotImplementedError("This tool does not support asynchronous execution")
+        if isinstance(input_data, str):
+            try:
+                input_data = json.loads(input_data)
+            except json.JSONDecodeError:
+                return "Error: Input must be valid JSON string or dictionary"
+
+        # Call the synchronous version
+        return self._run(**input_data)

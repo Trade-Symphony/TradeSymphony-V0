@@ -152,6 +152,14 @@ class ComplianceCheckTool(BaseTool):
         except Exception as e:
             return f"Could not perform compliance check. Error: {str(e)}"
 
-    async def _arun(self, decision: Dict[str, Any] | str) -> str:
+    async def _arun(
+        self,
+        action: str,
+        ticker: str,
+        quantity: int,
+        client_type: str,
+        restrictions: list,
+    ) -> str:
         """Use the tool asynchronously."""
-        raise NotImplementedError("This tool does not support asynchronous execution")
+        # Use the synchronous implementation for async calls
+        return self._run(action, ticker, quantity, client_type, restrictions)
