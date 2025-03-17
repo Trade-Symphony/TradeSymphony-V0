@@ -5,6 +5,7 @@ import pandas as pd
 import json
 from typing import List, Optional, Type
 from pydantic import BaseModel, Field
+import asyncio
 
 
 class TechnicalAnalysisInput(BaseModel):
@@ -64,13 +65,17 @@ class TechnicalAnalysisTool(BaseTool):
 
                 # Golden Cross (bullish): 50-day SMA crosses above 200-day SMA
                 golden_cross = (
-                    stock_data["SMA_50"].iloc[-2] <= stock_data["SMA_200"].iloc[-2]
+                    not stock_data["SMA_50"].empty
+                    and not stock_data["SMA_200"].empty
+                    and stock_data["SMA_50"].iloc[-2] <= stock_data["SMA_200"].iloc[-2]
                     and stock_data["SMA_50"].iloc[-1] > stock_data["SMA_200"].iloc[-1]
                 )
 
                 # Death Cross (bearish): 50-day SMA crosses below 200-day SMA
                 death_cross = (
-                    stock_data["SMA_50"].iloc[-2] >= stock_data["SMA_200"].iloc[-2]
+                    not stock_data["SMA_50"].empty
+                    and not stock_data["SMA_200"].empty
+                    and stock_data["SMA_50"].iloc[-2] >= stock_data["SMA_200"].iloc[-2]
                     and stock_data["SMA_50"].iloc[-1] < stock_data["SMA_200"].iloc[-1]
                 )
 
@@ -192,7 +197,9 @@ class TechnicalAnalysisTool(BaseTool):
                 # Generate trading signals for MACD
                 # Bullish crossover
                 if (
-                    stock_data["MACD"].iloc[-2] < stock_data["Signal_Line"].iloc[-2]
+                    not stock_data["MACD"].empty
+                    and not stock_data["Signal_Line"].empty
+                    and stock_data["MACD"].iloc[-2] < stock_data["Signal_Line"].iloc[-2]
                     and stock_data["MACD"].iloc[-1] > stock_data["Signal_Line"].iloc[-1]
                 ):
                     analysis_results["signals"].append(
@@ -205,7 +212,9 @@ class TechnicalAnalysisTool(BaseTool):
                     )
                 # Bearish crossover
                 elif (
-                    stock_data["MACD"].iloc[-2] > stock_data["Signal_Line"].iloc[-2]
+                    not stock_data["MACD"].empty
+                    and not stock_data["Signal_Line"].empty
+                    and stock_data["MACD"].iloc[-2] > stock_data["Signal_Line"].iloc[-2]
                     and stock_data["MACD"].iloc[-1] < stock_data["Signal_Line"].iloc[-1]
                 ):
                     analysis_results["signals"].append(
@@ -258,7 +267,6 @@ class TechnicalAnalysisTool(BaseTool):
                 current_upper = float(stock_data["BB_Upper"].iloc[-1])
                 current_middle = float(stock_data["BB_Middle"].iloc[-1])
                 current_lower = float(stock_data["BB_Lower"].iloc[-1])
-
                 # Calculate Bollinger Band width (volatility indicator)
                 bb_width = (current_upper - current_lower) / current_middle
 
@@ -408,6 +416,5 @@ class TechnicalAnalysisTool(BaseTool):
         except Exception as e:
             return f"Could not perform technical analysis for. Error: {str(e)}"
 
-    async def _arun(self, ticker: str, indicators: str) -> str:
-        """Use the tool asynchronously."""
-        raise NotImplementedError("This tool does not support asynchronous execution")
+    async def _arun(self, *args, **kwargs):
+        return await asyncio.to_thread(self._run, *args, **kwargs)

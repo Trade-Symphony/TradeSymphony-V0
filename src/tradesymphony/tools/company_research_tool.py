@@ -3,7 +3,8 @@ import os
 from crewai.tools import BaseTool
 import logging
 from pydantic import BaseModel, Field
-from typing import Type
+from typing import Type, Dict, Any
+import asyncio
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -29,21 +30,25 @@ class CompanyResearchTool(BaseTool):
     )
     args_schema: Type[BaseModel] = CompanyResearchInput
 
-    def _run(self, company: str) -> str:
+    def _run(self, company: str) -> Dict[str, Any]:
         """Use the tool."""
         try:
             tavily_api_key = os.getenv("TAVILY_API_KEY")
             if not tavily_api_key:
-                return "Tavily API key not found in environment variables."
+                return {"error": "Tavily API key not found in environment variables."}
 
             client = TavilyClient(api_key=tavily_api_key)
             search_results = client.search(f"{company} company information")
 
-            return f"Gathering information about company: {company}. Search results: {search_results}"
+            return {
+                "company_name": company,
+                "information": search_results,
+            }
 
         except Exception as e:
-            return f"Could not gather information about company: {company}. Error: {str(e)}"
+            return {
+                "error": f"Could not gather information about company: {company}. Error: {str(e)}"
+            }
 
-    async def _arun(self, company: str) -> str:
-        """Use the tool asynchronously."""
-        raise NotImplementedError("This tool does not support asynchronous execution")
+    async def _arun(self, company: str) -> Dict[str, Any]:
+        return await asyncio.to_thread(self._run, company)

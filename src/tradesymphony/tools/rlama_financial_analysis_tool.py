@@ -1,10 +1,11 @@
 import yfinance as yf
 import json
-from typing import Dict, Any, Type
+from typing import Type
 from crewai.tools import BaseTool
 from datetime import datetime
 import logging
 from pydantic import BaseModel, Field
+import asyncio
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -47,13 +48,7 @@ class RlamaFinancialAnalysisTool(BaseTool):
             if stock_data.empty:
                 return f"Could not retrieve data for {ticker}."
 
-            # Prepare data for rlama analysis
-            # Note: This is a placeholder for rlama integration
-            # In a real implementation, you would install the rlama package and use its API
             try:
-                # Mock rlama import - in production this would be a real import
-                # import rlama
-
                 # Prepare features
                 features = {}
                 features["close_prices"] = stock_data["Close"].values.tolist()
@@ -128,6 +123,5 @@ class RlamaFinancialAnalysisTool(BaseTool):
         except Exception as e:
             return f"Could not perform financial analysis. Error: {str(e)}"
 
-    async def _arun(self, input_data: Dict[str, Any] | str) -> str:
-        """Use the tool asynchronously."""
-        raise NotImplementedError("This tool does not support asynchronous execution")
+    async def _arun(self, *args, **kwargs):
+        return await asyncio.to_thread(self._run, *args, **kwargs)

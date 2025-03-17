@@ -4,6 +4,7 @@ from crewai.tools import BaseTool
 from pydantic import BaseModel, Field
 import logging
 from typing import Type
+import asyncio
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -37,6 +38,5 @@ class TavilySearchTool(BaseTool):
         except Exception as e:
             return f"Could not retrieve search results for {query}. Error: {str(e)}"
 
-    async def _arun(self, query: str) -> str:
-        """Use the tool asynchronously."""
-        raise NotImplementedError("This tool does not support asynchronous execution")
+    async def _arun(self, *args, **kwargs):
+        return await asyncio.to_thread(self._run, *args, **kwargs)

@@ -1,10 +1,11 @@
 import os
 import json
-from typing import Dict, Any, Type, Optional
+from typing import Type, Optional
 from crewai.tools import BaseTool
 from datetime import datetime
 import logging
 from pydantic import BaseModel, Field, root_validator
+import asyncio
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -150,6 +151,5 @@ class BrowserBasedResearchTool(BaseTool):
             logger.error(f"BrowserBasedResearchTool error: {str(e)}")
             return f"Error in research tool: {str(e)}"
 
-    async def _arun(self, input_data: Dict[str, Any] | str) -> str:
-        """Use the tool asynchronously."""
-        raise NotImplementedError("This tool does not support asynchronous execution")
+    async def _arun(self, *args, **kwargs):
+        return await asyncio.to_thread(self._run, *args, **kwargs)

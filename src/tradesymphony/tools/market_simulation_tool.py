@@ -1,10 +1,11 @@
 import yfinance as yf
 import json
-from typing import Dict, Any, Type, List
+from typing import Type, List
 from crewai.tools import BaseTool
 from datetime import datetime
 import logging
 from pydantic import BaseModel, Field
+import asyncio
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -166,13 +167,5 @@ class MarketSimulationTool(BaseTool):
         except Exception as e:
             return f"Could not run market simulation. Error: {str(e)}"
 
-    async def _arun(self, input_data: Dict[str, Any] | str) -> str:
-        """Use the tool asynchronously."""
-        if isinstance(input_data, str):
-            try:
-                input_data = json.loads(input_data)
-            except json.JSONDecodeError:
-                return "Error: Input must be valid JSON string or dictionary"
-
-        # Call the synchronous version
-        return self._run(**input_data)
+    async def _arun(self, *args, **kwargs):
+        return await asyncio.to_thread(self._run, *args, **kwargs)

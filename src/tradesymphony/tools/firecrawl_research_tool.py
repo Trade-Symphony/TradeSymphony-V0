@@ -1,45 +1,66 @@
-import requests
-from bs4 import BeautifulSoup
+import os
 from crewai.tools import BaseTool
 from pydantic import BaseModel, Field
-import logging
-from typing import Type
-
-# Setup logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+from typing import Type, List, Optional
+import asyncio
+from firecrawl import FirecrawlApp
 
 
 class FirecrawlResearchInput(BaseModel):
-    url: str = Field(
-        description="The URL of the website to crawl and extract information from."
+    """Input model for the FirecrawlResearchTool."""
+
+    url: str = Field(description="The URL to crawl.")
+    formats: List[str] = Field(
+        default=["markdown"], description="List of formats to return."
+    )
+    actions: List[str] = Field(
+        default=[], description="List of actions to perform on the page."
+    )
+    timeout: Optional[int] = Field(
+        default=30000, description="Timeout in milliseconds for the scraping operation."
     )
 
 
 class FirecrawlResearchTool(BaseTool):
     name: str = "FirecrawlResearchTool"
     description: str = (
-        "Useful for crawling specific websites and extracting relevant information. "
-        "Input should be the URL of the website to crawl."
+        "Tool for crawling and extracting content from a website using Firecrawl. "
+        "It accepts a URL and optional formats and actions to perform on the page."
     )
     args_schema: Type[BaseModel] = FirecrawlResearchInput
 
-    def _run(self, url: str) -> str:
+    def _run(
+        self,
+        url: str,
+        formats: list = ["markdown"],
+        actions: list = [],
+        timeout: int = 30000,
+    ) -> str:
         """Use the tool."""
         try:
-            response = requests.get(url)
-            response.raise_for_status()  # Raise HTTPError for bad responses (4xx or 5xx)
+            api_key = os.getenv("FIRECRAWL_API_KEY")
+            if not api_key:
+                return "Error: FIRECRAWL_API_KEY environment variable not set."
 
-            soup = BeautifulSoup(response.content, "html.parser")
+            app = FirecrawlApp(api_key=api_key)
+            scrape_result = app.scrape_url(
+                url, params={"formats": formats, "actions": actions, "timeout": timeout}
+            )
 
-            # Extract all text from the webpage
-            text = soup.get_text(separator=" ", strip=True)
+            if scrape_result and scrape_result.get("success"):
+                return str(
+                    scrape_result["data"]
+                )  # Ensure the data is converted to a string
+            else:
+                error_message = (
+                    scrape_result.get("error", "No additional error details provided.")
+                    if scrape_result
+                    else "Unknown error occurred."
+                )
+                return f"Error: Could not retrieve content from {url}. Result: {scrape_result}. Error details: {error_message}"
 
-            return f"Crawling website: {url}. Content: {text[:500]}..."  # Limit output for brevity
+        except Exception as e:
+            return f"Error: Could not retrieve content from {url}. {str(e)}"
 
-        except requests.exceptions.RequestException as e:
-            return f"Could not crawl website: {url}. Error: {str(e)}"
-
-    async def _arun(self, url: str) -> str:
-        """Use the tool asynchronously."""
-        raise NotImplementedError("This tool does not support asynchronous execution")
+    async def _arun(self, *args, **kwargs):
+        return await asyncio.to_thread(self._run, *args, **kwargs)

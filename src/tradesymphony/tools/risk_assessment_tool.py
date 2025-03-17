@@ -4,7 +4,8 @@ import numpy as np
 import pandas as pd
 import json
 from typing import List, Optional, Type
-from pydantic import BaseModel, Field, validator, root_validator
+from pydantic import BaseModel, Field, root_validator
+import asyncio
 
 
 class RiskAssessmentInput(BaseModel):
@@ -39,16 +40,6 @@ class RiskAssessmentInput(BaseModel):
             )
 
         return values
-
-    @validator("weights")
-    def validate_weights(cls, v, values):
-        if v is not None:
-            if abs(sum(v) - 1.0) > 0.0001:  # Allow small floating point errors
-                raise ValueError("Portfolio weights must sum to 1.0")
-
-            if values.get("tickers") and len(v) != len(values["tickers"]):
-                raise ValueError("Number of weights must match number of tickers")
-        return v
 
 
 class RiskAssessmentTool(BaseTool):
@@ -232,6 +223,5 @@ class RiskAssessmentTool(BaseTool):
         except Exception as e:
             return f"Could not perform risk assessment. Error: {str(e)}"
 
-    async def _arun(self, details: str) -> str:
-        """Use the tool asynchronously."""
-        raise NotImplementedError("This tool does not support asynchronous execution")
+    async def _arun(self, *args, **kwargs):
+        return await asyncio.to_thread(self._run, *args, **kwargs)

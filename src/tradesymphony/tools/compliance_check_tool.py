@@ -1,9 +1,10 @@
 from crewai.tools import BaseTool
 import yfinance as yf
 import json
-from typing import Dict, Any, List, Type
+from typing import List, Type
 from datetime import datetime
 from pydantic import BaseModel, Field
+import asyncio
 
 
 class ComplianceCheckInput(BaseModel):
@@ -152,14 +153,5 @@ class ComplianceCheckTool(BaseTool):
         except Exception as e:
             return f"Could not perform compliance check. Error: {str(e)}"
 
-    async def _arun(
-        self,
-        action: str,
-        ticker: str,
-        quantity: int,
-        client_type: str,
-        restrictions: list,
-    ) -> str:
-        """Use the tool asynchronously."""
-        # Use the synchronous implementation for async calls
-        return self._run(action, ticker, quantity, client_type, restrictions)
+    async def _arun(self, *args, **kwargs):
+        return await asyncio.to_thread(self._run, *args, **kwargs)

@@ -8,6 +8,8 @@ portfolio_analysis_task:
   expected_output: >
     A detailed analysis of the portfolio including key metrics, 
     current allocation breakdown, and critical observations.
+  output_file: "reports/portfolio_analysis.md"
+  max_retries: 2
 
 # Fundamental Research Task
 fundamental_research_task:
@@ -19,6 +21,8 @@ fundamental_research_task:
   expected_output: >
     Comprehensive company analyses with valuations and investment recommendations
     for each company in the portfolio.
+  output_file: "reports/fundamental_research.md"
+  max_execution_time: 500
 
 # Quantitative Screening Task
 quantitative_screening_task:
@@ -30,6 +34,7 @@ quantitative_screening_task:
   expected_output: >
     A prioritized list of investment opportunities based on quantitative factors,
     with detailed factor exposure analysis and technical signals.
+  output_file: "reports/quantitative_screening.md"
 
 # Risk Assessment Task
 risk_assessment_task:
@@ -41,6 +46,8 @@ risk_assessment_task:
   expected_output: >
     Detailed risk analysis including key metrics, stress test results,
     and recommended risk mitigation strategies.
+  output_file: "reports/risk_assessment.md"
+  max_retries: 2
 
 # ESG Analysis Task
 esg_analysis_task:
@@ -52,6 +59,7 @@ esg_analysis_task:
   expected_output: >
     ESG scoring analysis for all holdings, with identified risks and 
     opportunities related to environmental, social, and governance factors.
+  output_file: "reports/esg_analysis.md"
 
 # Macroeconomic Outlook Task
 macro_outlook_task:
@@ -63,6 +71,8 @@ macro_outlook_task:
   expected_output: >
     Macroeconomic forecast with detailed analysis of growth, inflation, 
     interest rates, and associated investment implications.
+  output_file: "reports/macro_outlook.md"
+  max_execution_time: 400
 
 # Investment Strategy Task
 investment_strategy_task:
@@ -74,6 +84,8 @@ investment_strategy_task:
   expected_output: >
     Comprehensive investment strategy with identified themes, recommended
     asset allocation, and specific tactical recommendations.
+  output_file: "reports/investment_strategy.md"
+  max_execution_time: 450
 
 # Compliance Review Task
 compliance_review_task:
@@ -85,6 +97,8 @@ compliance_review_task:
   expected_output: >
     Compliance assessment report with identified issues, required
     disclosures, and recommendations for addressing compliance concerns.
+  output_file: "reports/compliance_review.md"
+  max_retries: 3
 
 # Investment Committee Task
 investment_committee_task:
@@ -96,6 +110,7 @@ investment_committee_task:
   expected_output: >
     Decision document containing committee approval status, list of approved actions,
     dissenting opinions, and conditions for implementation.
+  output_file: "reports/investment_committee_decision.md"
 
 # Final Recommendation Task
 final_recommendation_task:
@@ -107,3 +122,5 @@ final_recommendation_task:
   expected_output: >
     Final investment recommendation report with detailed portfolio changes,
     implementation plan, and expected outcomes for client presentation.
+  output_file: "reports/final_recommendation.md"
+  max_retries: 2

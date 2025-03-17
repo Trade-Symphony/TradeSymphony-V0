@@ -4,6 +4,7 @@ import json
 from datetime import datetime
 from pydantic import BaseModel, Field
 from typing import Type
+import asyncio
 
 
 class FinancialDataInput(BaseModel):
@@ -24,12 +25,33 @@ class FinancialDataTool(BaseTool):
         """Use the tool."""
         try:
             stock = yf.Ticker(ticker)
+
+            # First check if we can get basic history data
+            hist = stock.history(period="1d")
+            if hist.empty:
+                return json.dumps(
+                    {
+                        "error": True,
+                        "message": f"Invalid ticker symbol: {ticker}. This symbol may not exist or may have been delisted.",
+                    },
+                    indent=2,
+                )
+
             info = stock.info
+
+            # Check if info contains meaningful data (not just trailingPegRatio)
+            if len(info) <= 1 or (len(info) == 1 and "trailingPegRatio" in info):
+                return json.dumps(
+                    {
+                        "error": True,
+                        "message": f"Could not retrieve meaningful data for {ticker}. This may not be a valid ticker symbol.",
+                    },
+                    indent=2,
+                )
 
             # Get historical data
             hist = stock.history(period="6mo")
             recent_price = hist["Close"].iloc[-1] if not hist.empty else None
-
             # Get financial statements
             income_stmt = stock.income_stmt
             balance_sheet = stock.balance_sheet
@@ -57,6 +79,7 @@ class FinancialDataTool(BaseTool):
                 "50_day_average": info.get("fiftyDayAverage", None),
                 "200_day_average": info.get("twoHundredDayAverage", None),
                 "current_price": recent_price,
+                "cash_flow": cash_flow.to_string(),
             }
 
             # Add income statement highlights if available
@@ -114,6 +137,5 @@ class FinancialDataTool(BaseTool):
         except Exception as e:
             return f"Could not retrieve financial data for {ticker}. Error: {str(e)}"
 
-    async def _arun(self, ticker: str) -> str:
-        """Use the tool asynchronously."""
-        return self._run(ticker)
+    async def _arun(self, *args, **kwargs):
+        return await asyncio.to_thread(self._run, *args, **kwargs)

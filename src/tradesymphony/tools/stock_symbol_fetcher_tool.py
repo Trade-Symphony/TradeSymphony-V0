@@ -1,8 +1,8 @@
 import asyncio
 from typing import List, Dict, Any, Optional, Type
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from crewai.tools import BaseTool
-from stocksage.utils import (
+from ..utils.api_fetch import (
     get_sp500_symbols,
     get_nasdaq100_symbols,
     get_dow30_symbols,
@@ -37,8 +37,8 @@ class StockSymbolRequest(BaseModel):
         default=5, description="Maximum number of symbols to return"
     )
 
-    class Config:
-        extra = "ignore"
+    # Replace class Config with model_config
+    model_config = ConfigDict(extra="ignore")
 
 
 class StockSymbolFetcherTool(BaseTool):
@@ -193,7 +193,13 @@ class StockSymbolFetcherTool(BaseTool):
         """
         # Ensure custom_symbols is an empty list if it's None
         custom_symbols = custom_symbols if custom_symbols is not None else []
-        return asyncio.run(self._arun(source, custom_symbols, limit))
+
+        # Use a new event loop instead of asyncio.run to avoid nested event loop issues
+        loop = asyncio.new_event_loop()
+        try:
+            return loop.run_until_complete(self._arun(source, custom_symbols, limit))
+        finally:
+            loop.close()
 
 
 if __name__ == "__main__":

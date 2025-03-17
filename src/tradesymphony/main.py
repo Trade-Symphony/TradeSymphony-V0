@@ -3,7 +3,7 @@ import sys
 import warnings
 import argparse
 from datetime import datetime
-
+from pathlib import Path
 from tradesymphony.crew import InvestmentFirmCrew
 
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
@@ -49,12 +49,19 @@ def run(args):
     print(f"🚀 Starting investment analysis for {portfolio_input['name']}...")
     crew = InvestmentFirmCrew(portfolio_input).crew()
     result = crew.kickoff(inputs=portfolio_input)
-    if args.output:
-        import json
+    # Check if we have structured Pydantic output
+    if hasattr(result, "pydantic") and result.pydantic:
+        # Convert Pydantic model to dictionary
+        output_dict = result.pydantic.model_dump()
 
-        with open(args.output, "w") as f:
-            json.dump(result, f, indent=2)
-        print(f"💾 Results saved to {args.output}")
+        # Save to JSON file
+        if args.output:
+            output_file = Path(args.output)
+            with open(output_file, "w") as f:
+                json.dump(output_dict, f, indent=2)
+            print(f"💾 Investment recommendation saved to {args.output}")
+
+        return output_dict
     return result
 
 

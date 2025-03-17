@@ -4,6 +4,7 @@ import json
 import pandas as pd
 from pydantic import BaseModel, Field
 from typing import Dict, Any, Type
+import asyncio
 
 try:
     from browserbase import BrowserBase
@@ -137,6 +138,5 @@ class StockScreenerTool(BaseTool):
         except Exception as e:
             return f"Error performing stock screening: {str(e)}"
 
-    async def _arun(self, criteria: str) -> str:
-        """Use the tool asynchronously."""
-        raise NotImplementedError("This tool does not support asynchronous execution")
+    async def _arun(self, *args, **kwargs):
+        return await asyncio.to_thread(self._run, *args, **kwargs)

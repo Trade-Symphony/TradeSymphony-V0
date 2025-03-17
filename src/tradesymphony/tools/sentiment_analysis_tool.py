@@ -4,6 +4,7 @@ import os
 import json
 import requests
 from typing import Type
+import asyncio
 
 
 class SentimentAnalysisInput(BaseModel):
@@ -29,7 +30,11 @@ class SentimentAnalysisTool(BaseTool):
                 return "Google Serper API key not found in environment variables."
 
             # Search for recent news
-            headers = {"X-API-KEY": serper_api_key, "Content-Type": "application/json"}
+            headers = {
+                "X-API-KEY": serper_api_key,
+                "Content-Type": "application/json",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",  # Add User-Agent
+            }
             payload = json.dumps(
                 {
                     "q": f"{company} stock news",
@@ -155,6 +160,5 @@ class SentimentAnalysisTool(BaseTool):
                 f"Could not perform sentiment analysis for {company}. Error: {str(e)}"
             )
 
-    async def _arun(self, company: str) -> str:
-        """Use the tool asynchronously."""
-        raise NotImplementedError("This tool does not support asynchronous execution")
+    async def _arun(self, *args, **kwargs):
+        return await asyncio.to_thread(self._run, *args, **kwargs)

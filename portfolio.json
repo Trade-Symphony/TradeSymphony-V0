@@ -52,5 +52,6 @@
     "max_sector_exposure": 0.6,
     "min_dividend_yield": 0.01,
     "max_volatility": 0.25
-  }
+  },
+  "analysis_date": "2025-03-17"
 }

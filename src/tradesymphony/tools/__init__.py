@@ -18,6 +18,7 @@ from .default_tools import (
     get_firecrawl_crawl_website_tool,
     get_firecrawl_scrape_website_tool,
 )
+from .stock_symbol_fetcher_tool import StockSymbolFetcherTool
 
 __all__ = [
     "BrowserBasedResearchTool",
@@ -38,4 +39,5 @@ __all__ = [
     "YFinanceTool",
     "get_firecrawl_crawl_website_tool",
     "get_firecrawl_scrape_website_tool",
+    "StockSymbolFetcherTool",
 ]

@@ -4,6 +4,7 @@ import numpy as np
 import json
 from typing import Type
 from pydantic import BaseModel, Field
+import asyncio
 
 
 class PortfolioOptimizationInput(BaseModel):
@@ -147,8 +148,5 @@ class PortfolioOptimizationTool(BaseTool):
         except Exception as e:
             return f"Error optimizing portfolio: {str(e)}"
 
-    async def _arun(
-        self, current_portfolio: str, risk_preference: str, return_preference: str
-    ) -> str:
-        """Use the tool asynchronously."""
-        raise NotImplementedError("This tool does not support asynchronous execution")
+    async def _arun(self, *args, **kwargs):
+        return await asyncio.to_thread(self._run, *args, **kwargs)

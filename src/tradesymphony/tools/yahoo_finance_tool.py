@@ -95,7 +95,8 @@ class YFinanceTool(BaseTool):
             if hist.empty or not info:
                 return {"error": f"Could not retrieve data for {ticker}"}
 
-            data = {
+            # Define all available metrics and their corresponding values
+            all_metrics = {
                 "ticker": ticker,
                 "company_name": info.get("longName", ticker),
                 "current_price": info.get("currentPrice"),
@@ -111,7 +112,38 @@ class YFinanceTool(BaseTool):
                 "short_interest": info.get("shortPercentOfFloat"),
                 "volatility": info.get("beta"),
             }
-            return data
+
+            # If metrics are specified, filter the response
+            if metrics:
+                # Create a mapping between common abbreviations and full keys
+                metrics_mapping = {
+                    "PE": "pe_ratio",
+                    "PB": "pb_ratio",
+                    "ROE": "return_on_equity",  # Not currently included
+                    "MC": "market_cap",
+                    "VOL": "volatility",
+                    "PRICE": "current_price",
+                    # Add more mappings as needed
+                }
+
+                # Build filtered result
+                filtered_data = {"ticker": ticker}  # Always include ticker
+
+                for metric in metrics:
+                    # Convert common abbreviations to full keys
+                    metric_key = metrics_mapping.get(metric.upper(), metric.lower())
+
+                    # If the metric is in our all_metrics dictionary
+                    if metric_key in all_metrics:
+                        filtered_data[metric_key] = all_metrics[metric_key]
+
+                return filtered_data
+
+            # If no metrics specified, return all metrics
+            return all_metrics
         except Exception as e:
             logger.error(f"Error fetching yfinance data for {ticker}: {e}")
             return {"error": f"Error fetching data for {ticker}: {e}"}
+
+    async def _arun(self, *args, **kwargs):
+        return await asyncio.to_thread(self._run, *args, **kwargs)

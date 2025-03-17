@@ -162,3 +162,6 @@ class AlphaVantageTool(BaseTool):
                 "error": str(e),
                 "message": "Failed to fetch data from Alpha Vantage API",
             }
+
+    async def _arun(self, *args, **kwargs):
+        return await asyncio.to_thread(self._run, *args, **kwargs)
