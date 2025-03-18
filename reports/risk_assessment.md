@@ -1,47 +1,50 @@
-**Comprehensive Risk Assessment of Portfolio (AAPL, MSFT, GOOGL)**:
-
-**1. RISK DASHBOARD**:
-- **Key Metrics**:
-  - **Annualized Volatility**: 19.66%
-  - **Sharpe Ratio**: 0.62
-  - **Max Drawdown**: -16.49%
-  - **Value-at-Risk (95%)**: -2.09%
-
-**2. PORTFOLIO VULNERABILITIES**:
-- **Concentration Risks**: 
-  - A high correlation is observed between AAPL (40%) and MSFT (30%), increasing exposure risk during downturns.
-- **Factor Tilts**: 
-  - The portfolio is tilted towards high-growth stocks (AAPL, GOOGL) which may underperform in a shifting market.
-- **Liquidity Concerns**: 
-  - Overall liquidity appears robust; however, in stressed market conditions, liquidating positions could be challenging.
-
-**3. STRESS TEST RESULTS**:
-- **Market Crash (20% decline)**: 
-  - Significant negative returns anticipated across all holding assets.
-- **Economic Recession**: 
-  - Projected slower growth and profitability, particularly impacting AAPL and GOOGL.
-- **Interest Rate Hike (200bps)**: 
-  - MSFT's cost of capital is likely to rise, which could adversely affect profitability.
-- **Geopolitical Tensions**: 
-  - Expected increase in market volatility and potential for panic-induced sell-offs.
-
-**4. TAIL RISK EXPOSURE**:
-- Moderate volatility suggests a risk of substantial losses, particularly in left-tail events where returns exceed -2.09%.
-
-**5. CORRELATION ANALYSIS**:
-- Correlation coefficient analysis suggests strong interconnectivity between AAPL and MSFT, highlighting a vulnerability to simultaneous price declines.
-
-**6. LIQUIDITY ASSESSMENT**:
-- High liquidity under normal conditions, but the portfolio requires careful monitoring of specific assets' liquidation timelines and associated impacts under market pressure.
-
-**7. SENSITIVITY ANALYSIS**:
-- Shifts in macroeconomic indicators (e.g., +100bps in interest rates, -20% in equity markets, +200bps in credit spreads) would present notable impacts on portfolio returns.
-
-**8. RISK MITIGATION RECOMMENDATIONS**:
-- **Diversification**: Expand sector exposure to mitigate concentration risks—consider adding utilities and consumer staples.
-- **Hedging Strategies**: Implement protective options, such as put options on indices to shelter against downturns.
-- **Monitoring Protocols**: Regular updates on macroeconomic indicators to timely adjust weights and exposures based on forecasts.
-- **Stop-Loss Protocols**: Setting thresholds to trigger sell orders during periods of excessive loss to limit downside potential.
-- **Portfolio Insurance**: Consider utilizing index put options to achieve broader market protection.
-
-This comprehensive risk assessment report provides crucial insights that inform proactive risk management strategies while enabling alignment with defined risk tolerances.
+{
+  "RISK DASHBOARD": {
+    "VaR (95%)": -0.0209,
+    "Expected Shortfall": "Data not calculated, needs further analysis",
+    "Annualized Volatility": 0.1966,
+    "Sharpe Ratio": 0.6228,
+    "Max Drawdown": -0.1649
+  },
+  "PORTFOLIO VULNERABILITIES": {
+    "Concentration Risks": "High exposure to tech sector stocks",
+    "Factor Tilts": "Weight towards large-cap growth stocks",
+    "Liquidity Concerns": "Moderate liquidity; larger sell-orders could impact price"
+  },
+  "STRESS TEST RESULTS": {
+    "Historical Scenarios": {
+      "2008 GFC": "Estimated reduction of 30% in portfolio value",
+      "2020 COVID Crash": "Estimated reduction of 20% in portfolio value"
+    },
+    "Hypothetical Events": {
+      "Fed Policy Shift": "Potential drawdown of 15%",
+      "Geopolitical Crisis": "Potential drawdown of 25%"
+    }
+  },
+  "TAIL RISK EXPOSURE": {
+    "Skewness": "Left skewed; potential for significant losses",
+    "Kurtosis": "High kurtosis indicating fat tails"
+  },
+  "CORRELATION ANALYSIS": {
+    "Current Correlation Assumptions": "Stable between AAPL, MSFT, and GOOGL",
+    "Stress Conditions": "Risk of correlation breakdown under severe market stress"
+  },
+  "LIQUIDITY ASSESSMENT": {
+    "Position Liquidation Timeline": {
+      "AAPL": "1-2 days",
+      "MSFT": "1 day",
+      "GOOGL": "1-3 days"
+    },
+    "Cost Impact": "Bid-ask spread estimated at 0.2% per trade"
+  },
+  "SENSITIVITY ANALYSIS": {
+    "+100bp Increase in Rates": "Expected portfolio drop of 5%",
+    "Equity Markets -20%": "Portfolio drop estimated at 15%",
+    "Credit Spreads +200bp": "Potential loss of 10%"
+  },
+  "RISK MITIGATION RECOMMENDATIONS": {
+    "Hedging Strategies": "Consider options to hedge high-growth exposures",
+    "Stop-Loss Protocols": "Implement tiered stop-loss orders for volatility",
+    "Portfolio Insurance Techniques": "Explore S&P 500 puts for downside protection"
+  }
+}

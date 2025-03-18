@@ -732,6 +732,7 @@ class InvestmentFirmCrew:
             # manager_agent=self.crew_manager(),
             # step_callback=self.log_crew_step,
             # task_callback=self.log_task_completion,
+            # ...existing code...
             memory=True,
             long_term_memory=LongTermMemory(
                 storage=LTMSQLiteStorage(
@@ -742,8 +743,12 @@ class InvestmentFirmCrew:
             short_term_memory=ShortTermMemory(
                 storage=RAGStorage(
                     embedder_config={
-                        "provider": "ollama",
-                        "config": {"model": "mxbai-embed-large"},
+                        "provider": "openai",  # Use OpenAI instead of Ollama for more reliability
+                        "config": {
+                            "model": "text-embedding-3-small",  # Smaller, faster model
+                            "timeout": 60,  # Add timeout in seconds
+                            "retries": 3,  # Add retry logic
+                        },
                     },
                     type="short_term",
                     path=memory_path,
@@ -752,8 +757,12 @@ class InvestmentFirmCrew:
             entity_memory=EntityMemory(
                 storage=RAGStorage(
                     embedder_config={
-                        "provider": "ollama",
-                        "config": {"model": "mxbai-embed-large"},
+                        "provider": "openai",  # Use OpenAI instead of Ollama
+                        "config": {
+                            "model": "text-embedding-3-small",
+                            "timeout": 60,
+                            "retries": 3,
+                        },
                     },
                     type="short_term",
                     path=memory_path,
