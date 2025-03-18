@@ -1,0 +1,106 @@
+{
+    "status": "success",
+    "message": "Investment analysis completed",
+    "execution_time": {
+      "start": "2025-03-18T13:59:04.366090",
+      "end": "2025-03-18T14:09:04.889960",
+      "duration_seconds": 600.52387
+    },
+    "data": {
+      "recommendations": [
+        {
+          "name": "Abbott Laboratories",
+          "ticker": "ABT",
+          "industry": {
+            "sector": "Healthcare",
+            "subIndustry": "Health Care Equipment & Supplies"
+          },
+          "investmentThesis": {
+            "recommendation": "Strong Buy",
+            "conviction": "High",
+            "keyDrivers": [
+              "Diversified product portfolio",
+              "Strong fundamentals with innovative healthcare solutions",
+              "Increasing demand in the healthcare sector"
+            ],
+            "expectedReturn": {
+              "value": 15,
+              "timeframe": "6-12 months"
+            },
+            "riskAssessment": {
+              "level": "Moderate"
+            }
+          },
+          "investmentRecommendationDetails": {
+            "positionSizingGuidance": {
+              "allocationPercentage": 10,
+              "maximumDollarAmount": 100000,
+              "minimumDollarAmount": 10000
+            }
+          }
+        },
+        {
+          "name": "Apple Inc.",
+          "ticker": "AAPL",
+          "industry": {
+            "sector": "Technology",
+            "subIndustry": "Consumer Electronics"
+          },
+          "investmentThesis": {
+            "recommendation": "Hold",
+            "conviction": "Medium",
+            "keyDrivers": [
+              "Strong brand loyalty",
+              "Expanding ecosystem of products and services",
+              "Growth in service revenue"
+            ],
+            "expectedReturn": {
+              "value": 8,
+              "timeframe": "12 months"
+            },
+            "riskAssessment": {
+              "level": "High"
+            }
+          },
+          "investmentRecommendationDetails": {
+            "positionSizingGuidance": {
+              "allocationPercentage": 20,
+              "maximumDollarAmount": 50000,
+              "minimumDollarAmount": 5000
+            }
+          }
+        },
+        {
+          "name": "NVIDIA Corporation",
+          "ticker": "NVDA",
+          "industry": {
+            "sector": "Technology",
+            "subIndustry": "Semiconductors"
+          },
+          "investmentThesis": {
+            "recommendation": "Buy",
+            "conviction": "High",
+            "keyDrivers": [
+              "Leadership in GPU technology and AI advancements",
+              "Growing demand for gaming and data center applications",
+              "Strong financial performance and revenue growth"
+            ],
+            "expectedReturn": {
+              "value": 20,
+              "timeframe": "6-12 months"
+            },
+            "riskAssessment": {
+              "level": "Moderate"
+            }
+          },
+          "investmentRecommendationDetails": {
+            "positionSizingGuidance": {
+              "allocationPercentage": 15,
+              "maximumDollarAmount": 50000,
+              "minimumDollarAmount": 5000
+            }
+          }
+        }
+      ]
+    }
+  }

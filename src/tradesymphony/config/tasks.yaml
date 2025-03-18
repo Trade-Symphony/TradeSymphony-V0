@@ -1,29 +1,32 @@
 # Portfolio Analysis Task
 portfolio_analysis_task:
   description: >
-    Analyze the provided portfolio's current composition using advanced quantitative methods:
-    1. Break down asset allocation by class (equities, fixed income, alternatives, cash), geography (developed/emerging markets), 
-       sector (GICS classification), style (growth/value/blend), and market capitalization.
-    2. Identify concentration risks where >5% exposure exists in any single position, sector, or factor.
-    3. Calculate and interpret key performance metrics: historical returns (1M, 3M, YTD, 1Y, 3Y, 5Y, 10Y if available), 
-       Sharpe ratio, Sortino ratio, maximum drawdown, upside/downside capture, tracking error vs benchmark.
-    4. Generate correlation matrix between assets and against major indices (S&P 500, MSCI World, Bloomberg Aggregate Bond).
-    5. Flag outliers in performance (±2 standard deviations from mean) and identify performance attribution drivers.
-    6. Analyze factor exposures: size, value, momentum, quality, volatility, yield.
-    7. Assess portfolio efficiency against the efficient frontier and identify optimization opportunities.
+    Identify the best stocks to buy in the current market by analyzing real-time data and market conditions:
+    1. Analyze current market sentiment, volatility indices (VIX), and macro trends to determine optimal market timing.
+    2. Screen the universe of stocks across major exchanges (NYSE, NASDAQ, AMEX) using multi-factor analysis including 
+       momentum, relative strength, earnings revisions, valuation, and technical indicators.
+    3. Identify sectors showing strong relative performance using sector rotation analysis and industry-specific catalysts.
+    4. Analyze each high-potential stock's fundamental metrics: revenue growth, profit margins, EPS growth, ROE, debt levels, 
+       free cash flow generation, and valuation multiples relative to growth rates and sector averages.
+    5. Evaluate technical strength through chart patterns, moving average relationships, volume trends, and relative strength indicators.
+    6. Assess institutional activity including fund flows, analyst ratings changes, short interest, and unusual options activity.
+    7. Integrate alternative data signals: insider buying/selling, social media sentiment, website traffic trends, app download metrics.
+    8. Calculate expected risk-adjusted returns using price targets, volatility measures, and probability-weighted scenarios.
   expected_output: >
-    A comprehensive portfolio analysis report structured as follows:
+    A comprehensive stock recommendation report structured as follows:
     
-    1. EXECUTIVE SUMMARY (Key metrics table with current allocation vs target, top/bottom contributors, risk-adjusted returns)
-    2. ALLOCATION BREAKDOWN (Visualized breakdowns with accompanying analysis of exposures and imbalances)
-    3. PERFORMANCE ANALYSIS (Returns across multiple time horizons with benchmark comparisons and attribution analysis)
-    4. RISK METRICS (Volatility, drawdowns, VaR, stress test results against historical scenarios)
-    5. CORRELATION ANALYSIS (Heat map and interpretation of diversification benefits/concerns)
-    6. FACTOR EXPOSURES (Quantified exposures with performance impact assessment)
-    7. PORTFOLIO EFFICIENCY (Position relative to efficient frontier with Sharpe ratio optimization potential)
-    8. KEY OBSERVATIONS (Bullet-pointed strengths, weaknesses, and actionable recommendations)
+    1. MARKET OUTLOOK (Current market conditions, sentiment analysis, and optimal investment strategy for present environment)
+    2. TOP STOCK RECOMMENDATIONS (Ranked list of 10-15 best stocks to buy now with clear entry points, target prices, and timeframes)
+    3. RECOMMENDATION HIGHLIGHTS (For each stock: key buy catalysts, growth drivers, competitive advantages, and timing considerations)
+    4. FUNDAMENTAL ANALYSIS (Financial strength metrics, growth trajectory, management quality, and valuation attractiveness)
+    5. TECHNICAL SETUP (Chart analysis showing optimal entry points, support levels, resistance targets, and risk management levels)
+    6. SECTOR INSIGHTS (Industry-specific trends, regulatory developments, and competitive landscape analysis)
+    7. RISK ASSESSMENT (Company-specific risks, appropriate position sizing, stop-loss recommendations, and hedging strategies)
+    8. IMPLEMENTATION STRATEGY (Prioritized buy order with specific entry price ranges, position sizing guidance, and order types)
     
-    Each section should include data-driven insights and explicit recommendations for portfolio improvements.
+    Each recommendation should include specific actionable guidance: buy price ranges, position sizing relative to portfolio,
+    stop-loss levels, profit targets, expected holding periods, and catalysts to monitor. Emphasize both immediate tactical
+    opportunities and strategic positions aligned with emerging market and sector trends.
   output_file: "reports/portfolio_analysis.md"
   max_retries: 2
 

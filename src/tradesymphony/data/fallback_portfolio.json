@@ -1,0 +1,28 @@
+{
+  "portfolio_items": [
+    {
+      "symbol": "AAPL",
+      "quantity": 10,
+      "purchase_price": 150.0,
+      "purchase_date": "2023-01-01"
+    },
+    {
+      "symbol": "MSFT",
+      "quantity": 5,
+      "purchase_price": 300.0,
+      "purchase_date": "2023-01-15"
+    },
+    {
+      "symbol": "GOOGL",
+      "quantity": 2,
+      "purchase_price": 2800.0,
+      "purchase_date": "2023-02-10"
+    },
+    {
+      "symbol": "AMZN",
+      "quantity": 3,
+      "purchase_price": 3200.0,
+      "purchase_date": "2023-03-05"
+    }
+  ]
+}

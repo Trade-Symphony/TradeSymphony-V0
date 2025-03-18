@@ -32,6 +32,7 @@ COPY --from=builder --chown=1000:1000 /src /src
 # Make sure the virtual environment is properly activated
 ENV PYTHONPATH="/src" \
     PATH="/src/.venv/bin:$PATH" \
-    VIRTUAL_ENV="/src/.venv"
+    VIRTUAL_ENV="/src/.venv" \
+    WATCHFILES_FORCE_POLLING=false
 
-CMD ["uvicorn", "src.tradesymphony.api:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "src.tradesymphony.api:app", "--host", "0.0.0.0", "--port", "8000"]

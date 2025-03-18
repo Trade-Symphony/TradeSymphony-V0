@@ -2,6 +2,7 @@ from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task, before_kickoff, after_kickoff
 from langchain.callbacks import LangChainTracer
 from langsmith import Client, traceable
+from langsmith.utils import LangSmithRetry
 import langsmith
 from typing import Dict, Any
 from .models import InvestmentRecommendationList
@@ -15,17 +16,20 @@ from crewai.memory.storage.ltm_sqlite_storage import LTMSQLiteStorage
 
 # Import custom tools
 from .tools import (
-    StockScreenerTool,
-    FinancialDataTool,
-    MacroeconomicAnalysisTool,
-    SentimentAnalysisTool,
-    RiskAssessmentTool,
-    ComplianceCheckTool,
-    PortfolioOptimizationTool,
-    TechnicalAnalysisTool,
-    TavilySearchTool,
-    FirecrawlResearchTool,
+    # BrowserBasedResearchTool,
     CompanyResearchTool,
+    ComplianceCheckTool,
+    FinancialDataTool,
+    FirecrawlResearchTool,
+    MacroeconomicAnalysisTool,
+    MarketSimulationTool,
+    PortfolioOptimizationTool,
+    RiskAssessmentTool,
+    FinancialAnalysisTool,
+    SentimentAnalysisTool,
+    StockScreenerTool,
+    TavilySearchTool,
+    TechnicalAnalysisTool,
     AlphaVantageTool,
     YFinanceTool,
     get_firecrawl_crawl_website_tool,
@@ -66,8 +70,21 @@ class InvestmentFirmCrew:
         """
         self.portfolio_input = portfolio_input
         self.verbose = verbose
+        retry_config = LangSmithRetry(
+            total=3,  # Reduced from 5
+            backoff_factor=0.3,
+            status_forcelist=[502, 503, 504, 408, 425, 429],
+            allowed_methods=None,
+            raise_on_status=False,
+        )
         self.langsmith_client = Client(
-            api_key=os.getenv("LANGCHAIN_API_KEY"),
+            auto_batch_tracing=False,
+            api_key=os.getenv(
+                "LANGSMITH_API_KEY",
+                "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",
+            ),
+            retry_config=retry_config,
+            timeout_ms=(10000, 20000),  # Shorter timeouts: 10s connect, 20s read
         )
         self.tracer = LangChainTracer(
             project_name=os.getenv("LANGCHAIN_PROJECT", "tradesymphony")
@@ -97,19 +114,30 @@ class InvestmentFirmCrew:
         """Perform cleanup after the crew completes operation."""
         print("✅ Investment analysis completed")
 
-        # Handle recommendations attribute more safely
+        # Handle recommendations attribute more safely with custom serialization
         recommendations = []
-        if hasattr(result, "recommendations"):
-            recommendations = result.recommendations
-        elif hasattr(result, "pydantic") and hasattr(
-            result.pydantic, "recommendations"
-        ):
-            recommendations = result.pydantic.recommendations
-        elif isinstance(result, dict):
-            recommendations = result.get("recommendations", [])
+        try:
+            if hasattr(result, "recommendations"):
+                recommendations = result.recommendations
+            elif hasattr(result, "pydantic") and hasattr(
+                result.pydantic, "recommendations"
+            ):
+                recommendations = result.pydantic.recommendations
+            elif isinstance(result, dict):
+                recommendations = result.get("recommendations", [])
+
+            # Convert any non-serializable objects to their string representation if needed
+            if hasattr(recommendations, "__len__"):
+                recommendations_count = len(recommendations)
+            else:
+                recommendations_count = 0
+
+        except Exception as e:
+            print(f"Warning: Error processing recommendations: {e}")
+            recommendations_count = 0
 
         print(
-            f"📑 Results summary: {len(recommendations)} investment recommendations generated"
+            f"📑 Results summary: {recommendations_count} investment recommendations generated"
         )
         return result
 
@@ -128,7 +156,7 @@ class InvestmentFirmCrew:
                 "backstory": "You are an experienced investment firm coordinator with exceptional organizational skills. You understand the investment process deeply and know how to efficiently manage complex workflows involving multiple specialized professionals. Your focus is on ensuring clear communication, proper task delegation, and synthesizing insights from various team members into coherent outcomes.",
             },
             tools=[],  # No tools for the manager, purely coordination-focused
-            verbose=self.verbose,
+            verbose=True,
             allow_delegation=True,
             memory=True,  # Needs memory to track the entire process
             respect_context_window=True,
@@ -156,7 +184,7 @@ class InvestmentFirmCrew:
         return Agent(
             config=self.agents_config["chief_investment_officer"],
             tools=financial_tools,
-            verbose=self.verbose,
+            verbose=True,
             allow_delegation=True,
             # max_iter=5,
             memory=True,  # Enable memory for context retention
@@ -183,7 +211,7 @@ class InvestmentFirmCrew:
         return Agent(
             config=self.agents_config["investment_committee"],
             tools=committee_tools,
-            verbose=self.verbose,
+            verbose=True,
             allow_delegation=False,
             memory=True,  # Committee needs to remember previous discussions
             respect_context_window=True,
@@ -208,7 +236,7 @@ class InvestmentFirmCrew:
         return Agent(
             config=self.agents_config["chief_compliance_officer"],
             tools=compliance_tools,
-            verbose=self.verbose,
+            verbose=True,
             allow_delegation=False,
             memory=True,  # Compliance needs memory for consistent rulings
             respect_context_window=True,
@@ -231,11 +259,12 @@ class InvestmentFirmCrew:
             RiskAssessmentTool(),
             TavilySearchTool(),
             StockSymbolFetcherTool(),
+            MarketSimulationTool(),
         ]
         return Agent(
             config=self.agents_config["portfolio_manager"],
             tools=portfolio_tools,
-            verbose=self.verbose,
+            verbose=True,
             allow_delegation=True,
             memory=True,
             respect_context_window=True,
@@ -255,12 +284,13 @@ class InvestmentFirmCrew:
             MacroeconomicAnalysisTool(),
             TechnicalAnalysisTool(),
             FinancialDataTool(),
+            MarketSimulationTool(),
             StockSymbolFetcherTool(),
         ]
         return Agent(
             config=self.agents_config["risk_manager"],
             tools=risk_tools,
-            verbose=self.verbose,
+            verbose=True,
             allow_delegation=False,
             memory=True,  # Risk management requires historical context
             respect_context_window=True,
@@ -285,12 +315,14 @@ class InvestmentFirmCrew:
             get_firecrawl_crawl_website_tool(),
             get_firecrawl_scrape_website_tool(),
             StockSymbolFetcherTool(),
+            # BrowserBasedResearchTool(),
+            FinancialAnalysisTool(),
         ]
 
         return Agent(
             config=self.agents_config["fundamental_research_analyst"],
             tools=research_tools,
-            verbose=self.verbose,
+            verbose=True,
             allow_delegation=False,
             memory=True,  # Research requires context from previous findings
             respect_context_window=True,
@@ -314,11 +346,12 @@ class InvestmentFirmCrew:
             PortfolioOptimizationTool(),
             RiskAssessmentTool(),
             StockSymbolFetcherTool(),
+            FinancialAnalysisTool(),
         ]
         return Agent(
             config=self.agents_config["quantitative_analyst"],
             tools=quant_tools,
-            verbose=self.verbose,
+            verbose=True,
             allow_delegation=False,
             memory=True,
             respect_context_window=True,
@@ -344,7 +377,7 @@ class InvestmentFirmCrew:
         return Agent(
             config=self.agents_config["esg_analyst"],
             tools=esg_tools,
-            verbose=self.verbose,
+            verbose=True,
             allow_delegation=False,
             memory=True,
             respect_context_window=True,
@@ -364,13 +397,14 @@ class InvestmentFirmCrew:
             FinancialDataTool(),
             SentimentAnalysisTool(),
             FirecrawlResearchTool(),
+            # BrowserBasedResearchTool(),
             StockSymbolFetcherTool(),
         ]
 
         return Agent(
             config=self.agents_config["macro_analyst"],
             tools=macro_tools,
-            verbose=self.verbose,
+            verbose=True,
             allow_delegation=False,
             memory=True,  # Critical for tracking economic trends over time
             respect_context_window=True,
@@ -398,7 +432,7 @@ class InvestmentFirmCrew:
         return Agent(
             config=self.agents_config["investment_strategist"],
             tools=strategy_tools,
-            verbose=self.verbose,
+            verbose=True,
             allow_delegation=True,  # Allow strategist to delegate research tasks
             memory=True,  # Critical for maintaining consistent strategy
             respect_context_window=True,
@@ -456,7 +490,7 @@ class InvestmentFirmCrew:
                 AlphaVantageTool(),
                 StockSymbolFetcherTool(),
             ],
-            verbose=self.verbose,
+            verbose=True,
         )
 
     @traceable
@@ -477,8 +511,10 @@ class InvestmentFirmCrew:
                 YFinanceTool(),
                 AlphaVantageTool(),
                 StockSymbolFetcherTool(),
+                # BrowserBasedResearchTool(),
+                FinancialAnalysisTool(),
             ],
-            verbose=self.verbose,
+            verbose=True,
         )
 
     @traceable
@@ -496,8 +532,9 @@ class InvestmentFirmCrew:
                 YFinanceTool(),
                 StockSymbolFetcherTool(),
                 AlphaVantageTool(),
+                FinancialAnalysisTool(),
             ],
-            verbose=self.verbose,
+            verbose=True,
         )
 
     @traceable
@@ -514,8 +551,9 @@ class InvestmentFirmCrew:
                 MacroeconomicAnalysisTool(),
                 PortfolioOptimizationTool(),
                 StockSymbolFetcherTool(),
+                MarketSimulationTool(),
             ],
-            verbose=self.verbose,
+            verbose=True,
         )
 
     @traceable
@@ -535,7 +573,7 @@ class InvestmentFirmCrew:
                 StockSymbolFetcherTool(),
             ],
             context=[],  # ESG analysis builds on fundamental research
-            verbose=self.verbose,
+            verbose=True,
         )
 
     @traceable
@@ -552,8 +590,9 @@ class InvestmentFirmCrew:
                 SentimentAnalysisTool(),
                 TavilySearchTool(),
                 StockSymbolFetcherTool(),
+                # BrowserBasedResearchTool(),
             ],
-            verbose=self.verbose,
+            verbose=True,
         )
 
     @traceable
@@ -570,6 +609,7 @@ class InvestmentFirmCrew:
                 PortfolioOptimizationTool(),
                 RiskAssessmentTool(),
                 StockSymbolFetcherTool(),
+                MarketSimulationTool(),
             ],
             context=[
                 self.fundamental_research_task(),
@@ -578,7 +618,7 @@ class InvestmentFirmCrew:
                 self.esg_analysis_task(),
                 self.risk_assessment_task(),  # Added risk assessment as context
             ],
-            verbose=self.verbose,
+            verbose=True,
         )
 
     @traceable
@@ -599,7 +639,7 @@ class InvestmentFirmCrew:
                 self.investment_strategy_task(),
                 self.portfolio_analysis_task(),  # Added for compliance context
             ],
-            verbose=self.verbose,
+            verbose=True,
         )
 
     @traceable
@@ -622,7 +662,7 @@ class InvestmentFirmCrew:
                 self.risk_assessment_task(),
                 self.portfolio_analysis_task(),  # Add current portfolio for reference
             ],
-            verbose=self.verbose,
+            verbose=True,
         )
 
     @traceable
@@ -647,7 +687,7 @@ class InvestmentFirmCrew:
                 self.risk_assessment_task(),
                 self.compliance_review_task(),
             ],
-            verbose=self.verbose,
+            verbose=True,
             output_pydantic=InvestmentRecommendationList,  # Use the wrapper model instead of List[InvestmentRecommendation]
             instructions="""
             IMPORTANT: Your final output must be an array of investment recommendations in JSON format.
@@ -723,7 +763,7 @@ class InvestmentFirmCrew:
                 self.investment_committee_task(),
                 self.final_recommendation_task(),
             ],
-            verbose=self.verbose,
+            verbose=True,
             process=Process.sequential,
             manager_llm={
                 "model": os.getenv("MODEL", "gpt-4o-mini"),
