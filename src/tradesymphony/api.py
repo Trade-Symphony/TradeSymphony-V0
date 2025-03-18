@@ -41,7 +41,12 @@ async def fetch_portfolio_data() -> Dict[str, Any]:
         try:
             response = await client.get(PORTFOLIO_API_URL)
             response.raise_for_status()
-            return response.json()
+            data = response.json()
+
+            # If the API returns a list, wrap it in a dictionary
+            if isinstance(data, list):
+                return {"portfolio_items": data}
+            return data
         except httpx.RequestError as exc:
             raise HTTPException(
                 status_code=503, detail=f"Error fetching portfolio data: {str(exc)}"

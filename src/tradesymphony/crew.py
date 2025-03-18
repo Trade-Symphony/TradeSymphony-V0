@@ -4,7 +4,7 @@ from langchain.callbacks import LangChainTracer
 from langsmith import Client, traceable
 import langsmith
 from typing import Dict, Any
-from .models.investment_recommendation import InvestmentRecommendation
+from .models import InvestmentRecommendation
 
 import os
 from dotenv import load_dotenv

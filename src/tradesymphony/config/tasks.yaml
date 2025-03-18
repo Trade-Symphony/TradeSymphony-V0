@@ -1,126 +1,348 @@
 # Portfolio Analysis Task
 portfolio_analysis_task:
   description: >
-    Analyze the provided portfolio's current composition in detail.
-    Examine asset allocation, sector exposure, and individual holdings.
-    Identify strengths and weaknesses in the portfolio structure.
-    Calculate key metrics including Sharpe ratio, volatility, and correlation matrix.
+    Analyze the provided portfolio's current composition using advanced quantitative methods:
+    1. Break down asset allocation by class (equities, fixed income, alternatives, cash), geography (developed/emerging markets), 
+       sector (GICS classification), style (growth/value/blend), and market capitalization.
+    2. Identify concentration risks where >5% exposure exists in any single position, sector, or factor.
+    3. Calculate and interpret key performance metrics: historical returns (1M, 3M, YTD, 1Y, 3Y, 5Y, 10Y if available), 
+       Sharpe ratio, Sortino ratio, maximum drawdown, upside/downside capture, tracking error vs benchmark.
+    4. Generate correlation matrix between assets and against major indices (S&P 500, MSCI World, Bloomberg Aggregate Bond).
+    5. Flag outliers in performance (±2 standard deviations from mean) and identify performance attribution drivers.
+    6. Analyze factor exposures: size, value, momentum, quality, volatility, yield.
+    7. Assess portfolio efficiency against the efficient frontier and identify optimization opportunities.
   expected_output: >
-    A detailed analysis of the portfolio including key metrics, 
-    current allocation breakdown, and critical observations.
+    A comprehensive portfolio analysis report structured as follows:
+    
+    1. EXECUTIVE SUMMARY (Key metrics table with current allocation vs target, top/bottom contributors, risk-adjusted returns)
+    2. ALLOCATION BREAKDOWN (Visualized breakdowns with accompanying analysis of exposures and imbalances)
+    3. PERFORMANCE ANALYSIS (Returns across multiple time horizons with benchmark comparisons and attribution analysis)
+    4. RISK METRICS (Volatility, drawdowns, VaR, stress test results against historical scenarios)
+    5. CORRELATION ANALYSIS (Heat map and interpretation of diversification benefits/concerns)
+    6. FACTOR EXPOSURES (Quantified exposures with performance impact assessment)
+    7. PORTFOLIO EFFICIENCY (Position relative to efficient frontier with Sharpe ratio optimization potential)
+    8. KEY OBSERVATIONS (Bullet-pointed strengths, weaknesses, and actionable recommendations)
+    
+    Each section should include data-driven insights and explicit recommendations for portfolio improvements.
   output_file: "reports/portfolio_analysis.md"
   max_retries: 2
 
 # Fundamental Research Task
 fundamental_research_task:
   description: >
-    Conduct in-depth fundamental research on all portfolio companies.
-    Review financial statements, business models, and competitive positioning.
-    Evaluate management quality, growth prospects, and potential risks.
-    Assign fair value estimates and investment recommendations.
+    Conduct rigorous bottom-up fundamental analysis on all portfolio holdings and high-priority watchlist candidates:
+    1. Business Model Assessment: Core value proposition, revenue streams, competitive positioning, and industry dynamics using Porter's Five Forces.
+    2. Financial Statement Analysis: 5-year trend analysis of key metrics (revenue growth, gross/operating/net margins, ROE/ROIC/ROA, FCF conversion).
+    3. Balance Sheet Strength: Debt-to-equity, interest coverage ratio, working capital efficiency, and liquidity ratios.
+    4. Management Evaluation: Track record, capital allocation history, insider ownership, compensation structure, and governance quality.
+    5. Growth Outlook: Addressable market size, organic growth drivers, M&A strategy, and runway for continued expansion.
+    6. Competitive Moat Analysis: Brand value, switching costs, network effects, cost advantages, intangible assets, and durability of advantages.
+    7. Risk Assessment: Customer concentration, regulatory exposure, technological disruption, cyclicality, and company-specific vulnerabilities.
+    8. Valuation: Multi-faceted approach using DCF, multiples (P/E, EV/EBITDA, P/FCF, P/B), and sum-of-parts as appropriate for each business model.
+    9. Catalyst Identification: Upcoming events, industry shifts, or underappreciated factors that could change market perception.
   expected_output: >
-    Comprehensive company analyses with valuations and investment recommendations
-    for each company in the portfolio.
+    A detailed fundamental research report for each analyzed company with a standardized structure:
+    
+    1. INVESTMENT SUMMARY (One-paragraph thesis with conviction level rating: Strong Buy/Buy/Hold/Sell/Strong Sell)
+    2. BUSINESS OVERVIEW (Business model, competitive position, industry structure, value proposition)
+    3. FINANCIAL ANALYSIS (Key metrics table with 5-year trends, peer comparison, and forward projections)
+    4. MANAGEMENT & GOVERNANCE (Leadership assessment, capital allocation track record, incentive alignment)
+    5. GROWTH OPPORTUNITIES (Quantified TAM, product roadmap, margin expansion potential)
+    6. COMPETITIVE ADVANTAGES (Depth and durability of moat with evidence-based assessment)
+    7. RISK FACTORS (Prioritized risks with potential impact quantification and mitigating factors)
+    8. VALUATION ANALYSIS (Multiple valuation methods with clear assumptions, sensitivity analysis, and price targets)
+    9. CATALYSTS & TIMELINE (Specific events that could drive re-rating with estimated timeframes)
+    10. INVESTMENT RECOMMENDATION (Clear action steps with position sizing guidance and entry/exit price levels)
+    
+    Each analysis should incorporate primary research insights, differentiated views from consensus, and specific, actionable investment conclusions.
   output_file: "reports/fundamental_research.md"
   max_execution_time: 500
 
 # Quantitative Screening Task
 quantitative_screening_task:
   description: >
-    Perform quantitative screening based on financial metrics and momentum factors.
-    Consider the investment style (growth, value, balanced) of the portfolio.
-    Identify stocks with attractive valuation metrics and strong momentum.
-    Rank opportunities using a composite scoring methodology.
+    Implement a multi-factor quantitative screening framework to identify high-potential investment opportunities:
+    1. Apply initial universe filters based on market cap (>$500M), liquidity (avg daily volume >$5M), and data quality standards.
+    2. Factor Model Construction: Develop composite factor scores across six factor families:
+       a. Value (P/E, P/B, P/FCF, EV/EBITDA, dividend yield with sector-relative adjustments)
+       b. Quality (ROE stability, earnings variability, debt levels, FCF conversion, accruals ratio)
+       c. Momentum (3M, 6M, 12M price momentum with volatility adjustment, earnings surprise momentum)
+       d. Growth (revenue growth rate, earnings growth consistency, ROIC trajectory, margin expansion)
+       e. Volatility (historical volatility, downside deviation, maximum drawdown, beta)
+       f. Sentiment (analyst revision trends, short interest, insider transactions, option skew)
+    3. Style-Adjusted Screening: Apply appropriate factor weightings based on the target portfolio's investment style.
+    4. Composite Scoring: Calculate z-scores for each factor and weighted composite scores with percentile rankings.
+    5. Anomaly Detection: Flag statistical outliers that suggest potential mispricing or unusual opportunities.
+    6. Technical Overlay: Apply technical analysis filters (moving averages, RSI, MACD, volume trends) as secondary validation.
+    7. Probabilistic Return Forecasting: Generate expected return distributions based on historical factor performance.
   expected_output: >
-    A prioritized list of investment opportunities based on quantitative factors,
-    with detailed factor exposure analysis and technical signals.
+    A systematic quantitative screening report with the following components:
+    
+    1. METHODOLOGY SUMMARY (Factor definitions, weighting scheme, and screening criteria)
+    2. TOP OPPORTUNITIES TABLE (Top 20 ranked securities with factor exposures, composite scores, and key metrics)
+    3. FACTOR PERFORMANCE ANALYSIS (Recent performance of individual factors with regime analysis)
+    4. SECTOR HEATMAP (Visual representation of factor strength across market sectors)
+    5. INDIVIDUAL SECURITY DEEP-DIVES (Top 5 opportunities with detailed factor breakdowns and statistical analysis)
+    6. TECHNICAL INDICATORS (Chart patterns, support/resistance levels, and momentum signals for top candidates)
+    7. BACKTEST RESULTS (Historical performance of the current screening methodology with risk/return metrics)
+    8. IMPLEMENTATION RECOMMENDATIONS (Suggested position sizing, entry timing, and portfolio fit considerations)
+    
+    Results should be presented with statistical significance measures, percentile rankings against the universe, and clear separation between descriptive statistics and predictive indicators. All recommendations should include confidence intervals and expected holding periods.
   output_file: "reports/quantitative_screening.md"
 
 # Risk Assessment Task
 risk_assessment_task:
   description: >
-    Conduct a comprehensive risk assessment of the current portfolio.
-    Identify potential vulnerabilities and tail risk events.
-    Calculate risk metrics and run various stress test scenarios.
-    Develop strategies to mitigate identified risks.
+    Perform comprehensive risk analysis using advanced risk modeling techniques:
+    1. Market Risk Assessment: Calculate and decompose VaR (95% and 99% confidence intervals, parametric and historical methods), 
+       expected shortfall, and conditional drawdown at risk (CDaR).
+    2. Factor Risk Decomposition: Quantify exposure to systematic risk factors (market beta, size, value, momentum, quality, volatility)
+       and attribute portfolio risk to specific factors.
+    3. Stress Testing: Model portfolio performance under historical scenarios (2008 GFC, 2020 COVID crash, 2022 inflation spike),
+       hypothetical events (Fed policy shift, geopolitical crisis, sector-specific shock), and custom sensitivity analyses.
+    4. Tail Risk Analysis: Evaluate non-normal distribution characteristics, skewness, kurtosis, and extreme event modeling using EVT.
+    5. Liquidity Risk: Assess time-to-liquidation under normal and stressed conditions, position concentration relative to average
+       daily volume, and bid-ask spread impact analysis.
+    6. Correlation Stability: Test correlation assumptions under stress conditions and identify potential correlation breakdowns.
+    7. Scenario Modeling: Simulate specific macro scenarios (inflation surge, recession, interest rate spikes) with quantified impacts.
+    8. Risk Mitigation Strategies: Design hedging strategies, stop-loss protocols, and portfolio insurance techniques with cost-benefit analysis.
   expected_output: >
-    Detailed risk analysis including key metrics, stress test results,
-    and recommended risk mitigation strategies.
+    A structured risk assessment report containing:
+    
+    1. RISK DASHBOARD (Executive summary with key risk metrics visualized: VaR, expected shortfall, stress test results, factor exposures)
+    2. PORTFOLIO VULNERABILITIES (Identified concentration risks, factor tilts, liquidity concerns ranked by severity)
+    3. STRESS TEST RESULTS (Table of portfolio performance under historical and hypothetical scenarios with detailed attribution)
+    4. TAIL RISK EXPOSURE (Analysis of fat tail properties with specific focus on left-tail events exceeding 3 standard deviations)
+    5. CORRELATION ANALYSIS (Stability testing results with identified potential diversification failures under stress)
+    6. LIQUIDITY ASSESSMENT (Position-by-position liquidity profile with liquidation timeline estimates and cost impact)
+    7. SENSITIVITY ANALYSIS (Quantified impacts of specific variable changes: rates +100bp, equity markets -20%, credit spreads +200bp)
+    8. RISK MITIGATION RECOMMENDATIONS (Actionable strategies with implementation costs, expected effectiveness, and monitoring protocols)
+    
+    Each risk metric should include benchmarking against appropriate indices, historical context, and forward-looking implications. 
+    All mitigation recommendations should be prioritized by efficacy, cost, and implementation complexity.
   output_file: "reports/risk_assessment.md"
   max_retries: 2
 
 # ESG Analysis Task
 esg_analysis_task:
   description: >
-    Evaluate all holdings and potential investments based on ESG criteria.
-    Assess environmental impact, social responsibility, and governance practices.
-    Compare ESG scores against industry benchmarks.
-    Identify ESG-related risks and opportunities within the portfolio.
+    Conduct rigorous ESG (Environmental, Social, Governance) analysis using a materiality-focused approach:
+    1. Materiality Assessment: Apply SASB materiality framework to identify financially material ESG factors by industry.
+    2. Environmental Analysis: Evaluate climate transition risk exposure, carbon footprint (Scopes 1-3), resource efficiency metrics,
+       environmental compliance record, and adaptation strategies for climate-related physical risks.
+    3. Social Assessment: Analyze human capital management (turnover, diversity metrics, labor disputes), product safety, data privacy
+       practices, supply chain labor standards, and community relations/controversy history.
+    4. Governance Evaluation: Assess board independence, diversity and expertise, executive compensation alignment, shareholder rights,
+       accounting quality, and business ethics including corruption/bribery incidents and regulatory compliance.
+    5. ESG Momentum Analysis: Track improvement/deterioration trends in key metrics over 3-5 years with associated management initiatives.
+    6. Double Materiality: Consider both financial materiality (ESG factors affecting financial performance) and impact materiality
+       (company impact on environment and society) with appropriate weighting.
+    7. Comparative Benchmarking: Compare ESG performance against industry peers, relevant indices, and recognized standards (GRI, TCFD, SASB).
+    8. Controversy Screening: Research and evaluate any ESG controversies, regulatory actions, or litigation with assessment of management response.
   expected_output: >
-    ESG scoring analysis for all holdings, with identified risks and 
-    opportunities related to environmental, social, and governance factors.
+    A comprehensive ESG analysis report structured as follows:
+    
+    1. ESG SUMMARY DASHBOARD (Key metrics by E, S, and G pillars with percentile rankings versus peers and indices)
+    2. MATERIALITY MAP (Industry-specific assessment of ESG factors with relative importance weighting)
+    3. ENVIRONMENTAL PROFILE (Climate risk exposure, emissions data, resource efficiency metrics, transition strategy evaluation)
+    4. SOCIAL ASSESSMENT (Human capital management, diversity statistics, customer welfare metrics, community impact analysis)
+    5. GOVERNANCE EVALUATION (Board composition, executive compensation analysis, shareholder rights assessment, ethics framework)
+    6. CONTROVERSY ANALYSIS (Detailed examination of material controversies with severity assessment and management response evaluation)
+    7. ESG MOMENTUM (Trend analysis with evidence of improving/deteriorating performance and forward commitments)
+    8. COMPARATIVE BENCHMARKING (Peer comparison tables with quintile rankings across material ESG metrics)
+    9. INVESTMENT IMPLICATIONS (Analysis of how ESG factors specifically impact financial performance, risk profile, and valuation)
+    10. ENGAGEMENT RECOMMENDATIONS (Priority areas for company engagement with specific questions and milestones for improvement)
+    
+    Analysis should distinguish between financially material ESG factors with direct business impact and values-based considerations,
+    with emphasis on how ESG characteristics affect risk-adjusted returns rather than purely ethical considerations.
   output_file: "reports/esg_analysis.md"
 
 # Macroeconomic Outlook Task
 macro_outlook_task:
   description: >
-    Develop a comprehensive macroeconomic outlook for the next 12 months.
-    Forecast economic growth trends, inflation expectations, and interest rate movements.
-    Assess potential impacts of current geopolitical events on markets.
-    Identify key macroeconomic risks and opportunities for investors.
+    Develop a comprehensive macroeconomic forecast incorporating multi-disciplinary analysis:
+    1. Economic Growth Analysis: Model GDP growth projections across major economies (US, EU, China, Japan, emerging markets)
+       with component breakdown (consumer spending, business investment, government spending, net exports).
+    2. Inflation Dynamics: Forecast core and headline inflation with detailed analysis of drivers (wage growth, supply constraints,
+       commodity prices, capacity utilization, monetary factors) and persistence assessment.
+    3. Central Bank Policy: Project monetary policy paths for major central banks (Fed, ECB, BOJ, PBOC, BOE) including rate expectations,
+       balance sheet actions, and forward guidance shifts with probability-weighted scenarios.
+    4. Fiscal Landscape: Analyze government spending projections, deficit/debt trajectories, and potential fiscal policy shifts
+       with political transition handicapping.
+    5. Yield Curve Analysis: Forecast sovereign yield curves with term premium decomposition and credit spread projections
+       across rating categories.
+    6. Currency Outlook: Provide exchange rate projections for major currency pairs based on interest rate differentials,
+       trade flows, and relative economic growth.
+    7. Commodity Markets: Forecast energy, metals, and agricultural commodity price trends with supply/demand balance analysis.
+    8. Geopolitical Risk Assessment: Identify and quantify potential geopolitical disruptions with probability weighting and market impact estimates.
   expected_output: >
-    Macroeconomic forecast with detailed analysis of growth, inflation, 
-    interest rates, and associated investment implications.
+    A structured macroeconomic forecast report containing:
+    
+    1. EXECUTIVE SUMMARY (Key projections table with baseline, upside, and downside scenarios for growth, inflation, rates, and markets)
+    2. GLOBAL GROWTH OUTLOOK (Region-by-region growth projections with underlying drivers and inflection point identification)
+    3. INFLATION ANALYSIS (Component breakdown of inflation pressures, wage-price dynamics, and inflation expectations)
+    4. MONETARY POLICY PROJECTIONS (Central bank reaction function analysis with projected policy paths and uncertainty ranges)
+    5. FISCAL POLICY ASSESSMENT (Budget projections, debt sustainability analysis, and potential policy pivot points)
+    6. MARKET IMPLICATIONS (Asset class return expectations derived from macro projections with relative attractiveness rankings)
+    7. YIELD CURVE FORECAST (Term structure projections with underlying component analysis and historical context)
+    8. CURRENCY OUTLOOK (Exchange rate projections with capital flow analysis and trade balance considerations)
+    9. COMMODITIES FORECAST (Supply-demand balance by major commodity with price projections)
+    10. RISK SCENARIO ANALYSIS (Detailed upside and downside scenarios with probability weights and investment implications)
+    
+    Each projection should include confidence intervals, key signposts to monitor, and explicit linkage to investment strategy
+    recommendations. Analysis should identify leading, coincident, and lagging indicators with clear triggers for strategy adjustment.
   output_file: "reports/macro_outlook.md"
   max_execution_time: 400
 
 # Investment Strategy Task
 investment_strategy_task:
   description: >
-    Formulate an overall investment strategy based on all research inputs.
-    Identify key investment themes and tactical opportunities.
-    Develop a recommended asset allocation model.
-    Consider fundamental, quantitative, ESG, and macroeconomic factors.
+    Synthesize all research inputs to formulate a cohesive investment strategy:
+    1. Market Regime Identification: Characterize the current market environment using both quantitative indicators
+       (volatility regime, correlation structure, dispersion metrics) and qualitative assessments (investor sentiment, positioning data).
+    2. Strategic Asset Allocation: Develop optimal allocation ranges across major asset classes (equities, fixed income,
+       alternatives, cash) based on risk/return expectations and client objectives.
+    3. Tactical Positioning: Recommend specific over/underweights relative to strategic allocation based on current market conditions
+       and near-term outlook with explicit timeframes (3-6 months).
+    4. Regional and Sector Allocation: Provide granular allocation guidance across regions, countries, sectors, and industries
+       with supporting rationale tied to macroeconomic drivers and valuation considerations.
+    5. Style/Factor Positioning: Recommend exposures across investment styles (growth/value/quality) and systematic factors
+       (size, momentum, quality, low volatility, yield) based on regime analysis and relative valuation.
+    6. Thematic Overlay: Identify 3-5 multi-year secular investment themes with specific implementation vehicles and allocation sizing.
+    7. Security Selection Framework: Establish criteria for individual security inclusion with minimum requirements for
+       fundamental quality, valuation parameters, and technical confirmation signals.
+    8. Portfolio Construction Methodology: Detail position sizing approach, diversification requirements, and risk management protocols.
   expected_output: >
-    Comprehensive investment strategy with identified themes, recommended
-    asset allocation, and specific tactical recommendations.
+    A comprehensive investment strategy document structured as follows:
+    
+    1. INVESTMENT THESIS OVERVIEW (Concise articulation of market view and core positioning rationale)
+    2. MARKET REGIME CHARACTERIZATION (Analysis of current market environment with key indicators and historical parallels)
+    3. STRATEGIC ASSET ALLOCATION (Target allocation ranges with expected returns, volatilities, and correlations)
+    4. TACTICAL POSITIONING (Current recommended allocations with detailed rationale for each deviation from strategic targets)
+    5. REGIONAL AND SECTOR STRATEGY (Heat map of attractiveness with specific allocation recommendations and supporting evidence)
+    6. FACTOR AND STYLE TILTS (Recommended factor exposures with regime-based justification and implementation vehicles)
+    7. INVESTMENT THEMES (Detailed analysis of each thematic opportunity with implementation options and sizing recommendations)
+    8. PORTFOLIO CONSTRUCTION GUIDELINES (Position sizing parameters, concentration limits, entry/exit criteria, rebalancing protocol)
+    9. SCENARIO ANALYSIS (Strategy performance expectations under baseline, bullish, and bearish scenarios)
+    10. ACTION PLAN (Prioritized implementation steps with timeframes, targets, and monitoring metrics)
+    
+    The strategy should demonstrate clear integration of fundamental, quantitative, ESG, and macroeconomic inputs with explicit
+    linkage between research findings and allocation decisions. Include both strategic (3-5 year) and tactical (3-6 month)
+    recommendations with differentiated conviction levels and explicit catalysts for position reassessment.
   output_file: "reports/investment_strategy.md"
   max_execution_time: 450
 
 # Compliance Review Task
 compliance_review_task:
   description: >
-    Review all proposed investment changes for regulatory compliance.
-    Ensure adherence to client mandates and investment restrictions.
-    Identify potential conflicts of interest or disclosure requirements.
-    Assess adherence to firm-wide compliance policies.
+    Conduct rigorous compliance assessment of all investment recommendations and portfolio changes:
+    1. Regulatory Compliance Verification: Evaluate adherence to applicable regulations (Securities Act, Investment Advisers Act,
+       Investment Company Act, Reg BI, DOL fiduciary rule) with jurisdiction-specific requirements.
+    2. Client Mandate Alignment: Verify consistency with client investment policy statements, including permitted asset classes,
+       prohibited investments, concentration limits, and specific restrictions.
+    3. Risk Limit Monitoring: Assess compliance with internal risk guidelines including position limits, sector concentration,
+       leverage restrictions, liquidity requirements, and counterparty exposure limits.
+    4. Conflict of Interest Screening: Identify potential conflicts (proprietary products, affiliated entities, revenue sharing,
+       soft dollar arrangements) with mitigation plan development.
+    5. Disclosure Requirements: Determine necessary disclosures for material risks, fees, expenses, conflicts, and special considerations
+       (alternatives, derivatives, illiquid investments).
+    6. Trading Compliance: Review for market manipulation risk, insider trading controls, best execution validation,
+       and trade allocation fairness across accounts.
+    7. ESG Claim Verification: Validate ESG-related claims against supporting evidence and relevant standards (SFDR, EU Taxonomy, SEC rules).
+    8. Documentation Assessment: Ensure investment recommendations include required compliance elements and supporting rationale.
   expected_output: >
-    Compliance assessment report with identified issues, required
-    disclosures, and recommendations for addressing compliance concerns.
+    A structured compliance review report containing:
+    
+    1. COMPLIANCE SUMMARY (Overall assessment with identified issues categorized by risk level: Critical, High, Medium, Low)
+    2. REGULATORY REQUIREMENTS ANALYSIS (Detailed assessment of applicable regulatory requirements and compliance status)
+    3. CLIENT MANDATE ALIGNMENT (Analysis of consistency with investment policy statements and client-specific restrictions)
+    4. RISK LIMIT ASSESSMENT (Comparison of proposed portfolio against established risk parameters with flagged exceptions)
+    5. CONFLICT OF INTEREST REGISTER (Identified conflicts with required disclosure language and mitigation procedures)
+    6. REQUIRED DISCLOSURES (Comprehensive disclosure language for inclusion in client communications)
+    7. RESTRICTED ACTIVITIES (Analysis of proposed transactions against restricted securities/activities lists)
+    8. ESG COMPLIANCE (Assessment of alignment between ESG claims and portfolio composition with supporting evidence)
+    9. REMEDIATION REQUIREMENTS (Specific actions needed to address identified compliance issues with responsible parties)
+    10. APPROVAL CONDITIONS (Explicit conditions that must be met before implementation can proceed)
+    
+    The report should cite specific regulatory references and firm policies for each compliance consideration, 
+    with clear distinction between legal requirements and best practices. Include attestation language for relevant 
+    stakeholders and document retention requirements.
   output_file: "reports/compliance_review.md"
   max_retries: 3
 
 # Investment Committee Task
 investment_committee_task:
   description: >
-    Review and evaluate the proposed investment strategy and portfolio changes.
-    Assess expected risk-adjusted returns and alignment with investment philosophy.
-    Consider input from all analysts and managers.
-    Vote on approval of investment recommendations.
+    Conduct a rigorous investment committee review process with diverse perspectives:
+    1. Proposal Evaluation: Thoroughly assess the presented investment strategy and portfolio recommendations against the firm's
+       investment philosophy, risk management framework, and client objectives.
+    2. Risk-Adjusted Return Analysis: Evaluate expected returns relative to identified risks across multiple time horizons,
+       with emphasis on downside protection and asymmetric return profiles.
+    3. Challenge Process: Apply devil's advocate methodology to stress-test key assumptions, implementation feasibility,
+       and potential unintended consequences.
+    4. Cross-Disciplinary Assessment: Integrate perspectives from portfolio management, research, risk, compliance, and client service
+       to identify blind spots or operational constraints.
+    5. Implementation Capacity: Evaluate operational capacity for execution including liquidity considerations, trading capabilities,
+       and potential market impact.
+    6. Conviction Scaling: Establish conviction levels (high/medium/low) for each recommendation with appropriate position sizing guidance.
+    7. Decision Framework: Apply a structured decision process with explicit voting, dissent documentation, and consensus building.
+    8. Implementation Conditions: Establish specific conditions, contingencies and guardrails for approved recommendations.
   expected_output: >
-    Decision document containing committee approval status, list of approved actions,
-    dissenting opinions, and conditions for implementation.
+    A formal investment committee decision document structured as follows:
+    
+    1. MEETING SUMMARY (Participants, date, key decisions, and voting results)
+    2. PROPOSAL ASSESSMENT (Structured evaluation of investment recommendations against established criteria)
+    3. APPROVED ACTIONS (Detailed list of approved investment actions with implementation parameters)
+    4. CONDITIONAL APPROVALS (Actions approved with specific conditions that must be met prior to implementation)
+    5. REJECTED PROPOSALS (Recommendations not approved with detailed rationale and potential reconsideration factors)
+    6. RISK ASSESSMENT CONSENSUS (Committee's collective assessment of key risks and appropriate mitigating measures)
+    7. IMPLEMENTATION TIMELINE (Sequencing and timing guidance for approved actions)
+    8. DISSENTING OPINIONS (Documented contrarian views with supporting rationale)
+    9. FOLLOW-UP REQUIREMENTS (Specific monitoring metrics, review timelines, and accountability assignments)
+    10. CONTINGENCY PARAMETERS (Pre-approved response protocols for specified market conditions or trigger events)
+    
+    The document should demonstrate rigorous governance, diverse perspective integration, and clear decision rationale.
+    All approved actions should include explicit parameters: sizing guidance, timing considerations, expected holding 
+    periods, and performance expectations with measurable success criteria.
   output_file: "reports/investment_committee_decision.md"
 
 # Final Recommendation Task
 final_recommendation_task:
   description: >
-    Synthesize all inputs from the investment process into final recommendations.
-    Review investment committee decisions and conditions.
-    Finalize portfolio adjustments and implementation timeline.
-    Project expected outcomes and performance targets.
+    Synthesize the entire investment process into actionable final recommendations:
+    1. Decision Integration: Consolidate all research inputs, committee decisions, and compliance requirements into a
+       cohesive, implementable investment plan.
+    2. Implementation Blueprint: Develop a detailed execution strategy including trade sequencing, position sizing,
+       limit order parameters, and timing considerations to minimize market impact.
+    3. Expected Outcome Modeling: Project portfolio performance expectations under base, upside, and downside scenarios
+       with detailed attribution analysis and benchmark-relative expectations.
+    4. Performance Measurement Framework: Establish specific metrics, benchmarks, and tracking error targets to evaluate
+       strategy effectiveness.
+    5. Communication Strategy: Prepare client-ready explanations of investment rationale, expected benefits, potential risks,
+       and alignment with long-term objectives.
+    6. Monitoring Protocol: Create a structured review process with specific indicators to monitor, frequency of assessment,
+       and decision triggers for potential strategy adjustments.
+    7. Risk Management Plan: Detail ongoing risk monitoring requirements, hedging considerations, and predefined response
+       protocols for adverse scenarios.
+    8. Tax Efficiency Analysis: For taxable accounts, evaluate tax implications of recommended changes with tax-loss
+       harvesting opportunities and tax-efficient implementation strategies.
   expected_output: >
-    Final investment recommendation report with detailed portfolio changes,
-    implementation plan, and expected outcomes for client presentation.
+    A comprehensive final recommendation report containing:
+    
+    1. EXECUTIVE SUMMARY (Concise overview of key recommendations, expected outcomes, and implementation timeline)
+    2. CURRENT PORTFOLIO ASSESSMENT (Brief review of current positioning and identified issues being addressed)
+    3. RECOMMENDED CHANGES (Detailed breakdown of all portfolio adjustments with security-level specifics)
+    4. IMPLEMENTATION PLAN (Step-by-step execution strategy with timing, sequencing, and order type guidance)
+    5. EXPECTED OUTCOMES (Projected performance metrics with scenario analysis and probability weightings)
+    6. RISK ASSESSMENT (Key risk exposures with mitigation strategies and continuous monitoring protocols)
+    7. STRATEGIC ALIGNMENT (Explanation of how recommendations align with client objectives and market outlook)
+    8. PERFORMANCE MEASUREMENT FRAMEWORK (Selected benchmarks, tracking metrics, and success criteria)
+    9. TAX CONSIDERATIONS (For taxable accounts, analysis of tax implications with optimization strategies)
+    10. ONGOING MANAGEMENT (Review schedule, adjustment triggers, and communication protocol)
+    
+    The recommendations should demonstrate clear synthesis of all prior analyses with client-specific customization.
+    Each recommendation should include clear rationale, expected contribution to portfolio objectives, and specific 
+    parameters for implementation (entry price ranges, position sizing, stop-loss levels, target holding periods).
+    Present information in both comprehensive form and executive summary format suitable for client presentation.
   output_file: "reports/final_recommendation.md"
   max_retries: 2
