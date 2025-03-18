@@ -1,5 +1,5 @@
-from pydantic import BaseModel, Field
-from typing import List, Optional
+from pydantic import BaseModel
+from typing import List
 
 
 class Industry(BaseModel):
@@ -40,3 +40,7 @@ class InvestmentRecommendation(BaseModel):
     industry: Industry
     investmentThesis: InvestmentThesis
     investmentRecommendationDetails: InvestmentRecommendationDetails
+
+
+class InvestmentRecommendationList(BaseModel):
+    recommendations: List[InvestmentRecommendation]

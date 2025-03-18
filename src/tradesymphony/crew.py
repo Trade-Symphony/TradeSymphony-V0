@@ -4,7 +4,7 @@ from langchain.callbacks import LangChainTracer
 from langsmith import Client, traceable
 import langsmith
 from typing import Dict, Any
-from .models import InvestmentRecommendation
+from .models import InvestmentRecommendationList
 
 import os
 from dotenv import load_dotenv
@@ -96,8 +96,20 @@ class InvestmentFirmCrew:
     def finalize_operations(self, result):
         """Perform cleanup after the crew completes operation."""
         print("✅ Investment analysis completed")
+
+        # Handle recommendations attribute more safely
+        recommendations = []
+        if hasattr(result, "recommendations"):
+            recommendations = result.recommendations
+        elif hasattr(result, "pydantic") and hasattr(
+            result.pydantic, "recommendations"
+        ):
+            recommendations = result.pydantic.recommendations
+        elif isinstance(result, dict):
+            recommendations = result.get("recommendations", [])
+
         print(
-            f"📑 Results summary: {len(result.get('recommendations', []))} investment recommendations generated"
+            f"📑 Results summary: {len(recommendations)} investment recommendations generated"
         )
         return result
 
@@ -620,7 +632,7 @@ class InvestmentFirmCrew:
         return Task(
             config=self.tasks_config["final_recommendation_task"],
             agent=self.chief_investment_officer(),
-            output_file="investment_recommendations.md",
+            output_file="reports/investment_recommendations.md",
             async_execution=False,  # Final recommendations should be sequential and carefully considered
             callback=self.log_task_completion,
             tools=[
@@ -636,7 +648,43 @@ class InvestmentFirmCrew:
                 self.compliance_review_task(),
             ],
             verbose=self.verbose,
-            output_pydantic=InvestmentRecommendation,
+            output_pydantic=InvestmentRecommendationList,  # Use the wrapper model instead of List[InvestmentRecommendation]
+            instructions="""
+            IMPORTANT: Your final output must be an array of investment recommendations in JSON format.
+            Generate 3-5 high-conviction investment recommendations with varying risk profiles.
+            
+            Each recommendation must follow this structure:
+            {
+              "name": "Company Name",
+              "ticker": "TICKER",
+              "industry": {
+                "sector": "Sector Name",
+                "subIndustry": "Sub-industry Name"
+              },
+              "investmentThesis": {
+                "recommendation": "Buy/Sell/Hold",
+                "conviction": "High/Medium/Low",
+                "keyDrivers": ["Driver 1", "Driver 2", "Driver 3"],
+                "expectedReturn": {
+                  "value": 12.5,  
+                  "timeframe": "12 months"
+                },
+                "riskAssessment": {
+                  "level": "High/Medium/Low"
+                }
+              },
+              "investmentRecommendationDetails": {
+                "positionSizingGuidance": {
+                  "allocationPercentage": 5.0,
+                  "maximumDollarAmount": 10000,
+                  "minimumDollarAmount": 5000
+                }
+              }
+            }
+            
+            Ensure recommendations are diversified across sectors and risk profiles to create a balanced portfolio.
+            The total allocation percentage across all recommendations should not exceed 100%.
+            """,
         )
 
     @traceable
@@ -685,32 +733,32 @@ class InvestmentFirmCrew:
             # step_callback=self.log_crew_step,
             # task_callback=self.log_task_completion,
             memory=True,
-            # long_term_memory=LongTermMemory(
-            #     storage=LTMSQLiteStorage(
-            #         db_path=f"{memory_path}/long_term_memory_storage.db"
-            #     ),
-            #     # storage_format="json",
-            # ),
-            # short_term_memory=ShortTermMemory(
-            #     storage=RAGStorage(
-            #         embedder_config={
-            #             "provider": "ollama",
-            #             "config": {"model": "mxbai-embed-large"},
-            #         },
-            #         type="short_term",
-            #         path=memory_path,
-            #     )
-            # ),
-            # entity_memory=EntityMemory(
-            #     storage=RAGStorage(
-            #         embedder_config={
-            #             "provider": "ollama",
-            #             "config": {"model": "mxbai-embed-large"},
-            #         },
-            #         type="short_term",
-            #         path=memory_path,
-            #     )
-            # ),
+            long_term_memory=LongTermMemory(
+                storage=LTMSQLiteStorage(
+                    db_path=f"{memory_path}/long_term_memory_storage.db"
+                ),
+                # storage_format="json",
+            ),
+            short_term_memory=ShortTermMemory(
+                storage=RAGStorage(
+                    embedder_config={
+                        "provider": "ollama",
+                        "config": {"model": "mxbai-embed-large"},
+                    },
+                    type="short_term",
+                    path=memory_path,
+                )
+            ),
+            entity_memory=EntityMemory(
+                storage=RAGStorage(
+                    embedder_config={
+                        "provider": "ollama",
+                        "config": {"model": "mxbai-embed-large"},
+                    },
+                    type="short_term",
+                    path=memory_path,
+                )
+            ),
             # planning=True,
         )
 

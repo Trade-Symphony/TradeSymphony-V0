@@ -311,38 +311,40 @@ final_recommendation_task:
   description: >
     Synthesize the entire investment process into actionable final recommendations:
     1. Decision Integration: Consolidate all research inputs, committee decisions, and compliance requirements into a
-       cohesive, implementable investment plan.
+       cohesive, implementable investment plan with multiple stock recommendations.
     2. Implementation Blueprint: Develop a detailed execution strategy including trade sequencing, position sizing,
-       limit order parameters, and timing considerations to minimize market impact.
+       limit order parameters, and timing considerations to minimize market impact across multiple securities.
     3. Expected Outcome Modeling: Project portfolio performance expectations under base, upside, and downside scenarios
-       with detailed attribution analysis and benchmark-relative expectations.
+       with detailed attribution analysis and benchmark-relative expectations for each recommended position.
     4. Performance Measurement Framework: Establish specific metrics, benchmarks, and tracking error targets to evaluate
-       strategy effectiveness.
+       strategy effectiveness across the basket of recommended securities.
     5. Communication Strategy: Prepare client-ready explanations of investment rationale, expected benefits, potential risks,
-       and alignment with long-term objectives.
+       and alignment with long-term objectives for all recommended positions.
     6. Monitoring Protocol: Create a structured review process with specific indicators to monitor, frequency of assessment,
-       and decision triggers for potential strategy adjustments.
+       and decision triggers for potential strategy adjustments for each security.
     7. Risk Management Plan: Detail ongoing risk monitoring requirements, hedging considerations, and predefined response
-       protocols for adverse scenarios.
+       protocols for adverse scenarios across the entire basket of recommendations.
     8. Tax Efficiency Analysis: For taxable accounts, evaluate tax implications of recommended changes with tax-loss
-       harvesting opportunities and tax-efficient implementation strategies.
+       harvesting opportunities and tax-efficient implementation strategies across multiple positions.
   expected_output: >
     A comprehensive final recommendation report containing:
     
-    1. EXECUTIVE SUMMARY (Concise overview of key recommendations, expected outcomes, and implementation timeline)
+    1. EXECUTIVE SUMMARY (Concise overview of key recommendations for multiple securities, expected outcomes, and implementation timeline)
     2. CURRENT PORTFOLIO ASSESSMENT (Brief review of current positioning and identified issues being addressed)
-    3. RECOMMENDED CHANGES (Detailed breakdown of all portfolio adjustments with security-level specifics)
-    4. IMPLEMENTATION PLAN (Step-by-step execution strategy with timing, sequencing, and order type guidance)
-    5. EXPECTED OUTCOMES (Projected performance metrics with scenario analysis and probability weightings)
+    3. RECOMMENDED CHANGES (Detailed breakdown of all portfolio adjustments with security-level specifics for multiple stock recommendations)
+    4. IMPLEMENTATION PLAN (Step-by-step execution strategy with timing, sequencing, and order type guidance for each recommended security)
+    5. EXPECTED OUTCOMES (Projected performance metrics with scenario analysis and probability weightings for the basket of recommendations)
     6. RISK ASSESSMENT (Key risk exposures with mitigation strategies and continuous monitoring protocols)
-    7. STRATEGIC ALIGNMENT (Explanation of how recommendations align with client objectives and market outlook)
+    7. STRATEGIC ALIGNMENT (Explanation of how multiple stock recommendations align with client objectives and market outlook)
     8. PERFORMANCE MEASUREMENT FRAMEWORK (Selected benchmarks, tracking metrics, and success criteria)
     9. TAX CONSIDERATIONS (For taxable accounts, analysis of tax implications with optimization strategies)
-    10. ONGOING MANAGEMENT (Review schedule, adjustment triggers, and communication protocol)
+    10. ONGOING MANAGEMENT (Review schedule, adjustment triggers, and communication protocol for the entire portfolio of recommendations)
     
     The recommendations should demonstrate clear synthesis of all prior analyses with client-specific customization.
     Each recommendation should include clear rationale, expected contribution to portfolio objectives, and specific 
     parameters for implementation (entry price ranges, position sizing, stop-loss levels, target holding periods).
     Present information in both comprehensive form and executive summary format suitable for client presentation.
+    The report should include multiple stock recommendations with varying risk profiles to provide diversification 
+    benefits and optimize the overall portfolio return potential.
   output_file: "reports/final_recommendation.md"
   max_retries: 2

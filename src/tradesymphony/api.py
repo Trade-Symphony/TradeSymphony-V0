@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException, BackgroundTasks
 import httpx
 from typing import Dict, Any
 import asyncio
+import datetime
 
 # Import TradeSymphony components
 from .crew import InvestmentFirmCrew
@@ -87,6 +88,8 @@ async def analysis(background_tasks: BackgroundTasks):
     Trigger an investment analysis by fetching portfolio data
     and running it through the InvestmentFirmCrew.
     """
+    start_time = datetime.datetime.now()
+
     # Fetch portfolio data
     portfolio_data = await fetch_portfolio_data()
 
@@ -96,10 +99,17 @@ async def analysis(background_tasks: BackgroundTasks):
         lambda: asyncio.run(run_investment_analysis(portfolio_data))
     )
 
+    end_time = datetime.datetime.now()
+
     return {
         "status": "success",
         "message": "Investment analysis completed",
-        "results": result,
+        "execution_time": {
+            "start": start_time.isoformat(),
+            "end": end_time.isoformat(),
+            "duration_seconds": (end_time - start_time).total_seconds(),
+        },
+        "data": result,  # Changed from "results" to "data" to match desired structure
     }
 
 
@@ -108,14 +118,23 @@ async def analysis_with_custom_data(portfolio: Dict[str, Any]):
     """
     Trigger an investment analysis using custom portfolio data provided in the request.
     """
+    start_time = datetime.datetime.now()
+
     result = await asyncio.to_thread(
         lambda: asyncio.run(run_investment_analysis(portfolio))
     )
 
+    end_time = datetime.datetime.now()
+
     return {
         "status": "success",
         "message": "Custom investment analysis completed",
-        "results": result,
+        "execution_time": {
+            "start": start_time.isoformat(),
+            "end": end_time.isoformat(),
+            "duration_seconds": (end_time - start_time).total_seconds(),
+        },
+        "data": result,  # Changed from "results" to "data" to match desired structure
     }
 
 
